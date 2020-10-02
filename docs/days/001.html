@@ -1,0 +1,185 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 1 - The history of neural networks</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="e7e5cc1c-e352-4021-a412-866ad70b0735" class="page sans">
+      <header>
+        <h1 class="page-title">Day 1 - The history of neural networks</h1>
+      </header>
+      <div class="page-body">
+        <h1 id="29adaefb-e65d-4bab-868b-031be26cbc68" class="">
+          The Artifician Neuron
+        </h1>
+        <ul id="03d2e06c-8427-477d-926d-6932a3931be6" class="bulleted-list">
+          <li>One or more binary inputs.</li>
+        </ul>
+        <ul id="5e90d19d-8d73-4bf5-82db-63ac58c9210b" class="bulleted-list">
+          <li>
+            Binary output that activates when more than a certain number of
+            inputs are active.
+          </li>
+        </ul>
+        <h1 id="18227bdf-69ab-489c-b58d-d2246317be89" class="">
+          Threshold Logic Unit (TLU)
+        </h1>
+        <ul id="6fad508b-df25-47ad-aadd-bddaf0256763" class="bulleted-list">
+          <li>Real number inputs.</li>
+        </ul>
+        <ul id="c964f654-252c-4a72-8385-a9d3ca13492c" class="bulleted-list">
+          <li>
+            Each input multiplied by a weight, and weighted sum calculated.
+          </li>
+        </ul>
+        <ul id="bd3b39a9-478d-460f-8243-6051a1211517" class="bulleted-list">
+          <li>
+            Weighted sum passed through a step function (e.g. heaviside function
+            or sign function).
+          </li>
+        </ul>
+        <p id="b344816b-cc10-4053-81e5-616e7744c3a2" class=""></p>
+        <figure id="c256ed2e-9408-406e-b77c-c4e7e0e9dec2" class="image">
+          <a
+            href="001/001.png"
+            ><img
+              style="width: 432px"
+              src="001/001.png"
+          /></a>
+        </figure>
+        <p id="c741aa7f-5981-4ea6-be48-33dabbbdacb9" class=""></p>
+        <p id="03839234-c08f-4ef7-85bd-ce57d7d0f24d" class="">
+          Examples of step functions:
+        </p>
+        <div id="be26736f-97ee-4651-ac9b-f7431fc948d9" class="column-list">
+          <div
+            id="e0a50ac8-cdf8-4984-9ea8-86e88e535930"
+            style="width: 50%"
+            class="column"
+          >
+            <figure id="62da7a06-636c-46fe-aab2-0fc4ceba76dd" class="image">
+              <a
+                href="001/002.png"
+                ><img
+                  style="width: 240px"
+                  src="001/002.png"
+              /></a>
+            </figure>
+          </div>
+          <div
+            id="f0168e60-03ba-44fd-807c-7a2e9b3544ad"
+            style="width: 50%"
+            class="column"
+          >
+            <figure id="6fcf51ad-b3e5-4401-8fd6-4d8629d4dc55" class="image">
+              <a
+                href="001/007.png"
+                ><img
+                  style="width: 240px"
+                  src="001/007.png"
+              /></a>
+            </figure>
+          </div>
+        </div>
+        <p id="2178d1ad-dc75-488d-87d5-19525d088777" class=""></p>
+        <p id="de5e8d21-1d25-44c8-9aee-879538a4aeb0" class=""></p>
+        <p id="c0e2bdf3-4c8f-45b4-953b-ee69fd3d5114" class="">
+          TLUs can be used for simple linear binary classification.
+        </p>
+        <ul id="29df4d0f-f402-44b3-b94c-5bd231846d57" class="bulleted-list">
+          <li>TLUs compute linear combination of inputs.</li>
+        </ul>
+        <ul id="b05e4d1f-3e60-42c8-9bca-d1fba319f8c7" class="bulleted-list">
+          <li>
+            If the result exceeds a certain threshold, positive class is
+            predicted.
+          </li>
+        </ul>
+        <ul id="b5f80762-2845-480f-971b-4d73d890b6ed" class="bulleted-list">
+          <li>Training the TLU means finding the right weights.</li>
+        </ul>
+        <h1 id="7a3a09d0-00dd-42da-a3cc-f15946907a57" class="">
+          The Perceptron
+        </h1>
+        <ul id="110102ea-c600-45ac-bf59-7ec6261d2d70" class="bulleted-list">
+          <li>
+            Made up of a single dense layer of TLUs (each TLU connected to all
+            inputs).
+          </li>
+        </ul>
+        <p id="0ff12231-ed92-479b-80a7-2a7672730441" class=""></p>
+        <figure id="e124486e-d2d1-4fa6-bb5f-f740a0eb2343" class="image">
+          <a
+            href="001/003.png"
+            ><img
+              style="width: 1838px"
+              src="001/003.png"
+          /></a>
+        </figure>
+        <ul id="55869fbc-a98d-4e86-89f7-cd0d71cf885a" class="bulleted-list">
+          <li>
+            The decision boundary of each output neuron is linear. As a result,
+            they are incapable of learning complex patterns (e.g. XOR gate).
+          </li>
+        </ul>
+        <ul id="1d692b9b-ab6b-4aa9-adbc-e4e27ac618c6" class="bulleted-list">
+          <li>
+            Predictions are based on hard thresholds (no class probabilities).
+          </li>
+        </ul>
+        <p id="d2c4a41a-a4c1-48c1-81bc-e0be1b9d0723" class=""></p>
+        <figure id="8e07c21b-6c44-4290-9a23-6032b10ee093" class="image">
+          <a
+            href="001/004.png"
+            ><img
+              style="width: 1818px"
+              src="001/004.png"
+          /></a>
+        </figure>
+        <ul id="67e42fa3-6f4a-42f5-b9d7-ad36a7e9bd36" class="bulleted-list">
+          <li>Trained using the Perceptron Learning Algorithm (PLA).</li>
+        </ul>
+        <p id="211e1257-0557-49bc-9fe3-e737bdb2a174" class=""></p>
+        <figure id="e77d2f23-fc44-496c-92d2-dfd791b165ab" class="image">
+          <a
+            href="001/005.png"
+            ><img
+              style="width: 1748px"
+              src="001/005.png"
+          /></a>
+        </figure>
+        <ul id="4e5e031a-ddd4-4fc9-bf4c-6b9a3ed1ce33" class="bulleted-list">
+          <li>
+            Perceptron convergence theorem: if training instances are linearly
+            separable, PLA will converge to a solution.
+          </li>
+        </ul>
+        <h1 id="e0f01e11-f7c2-4726-87f6-55c4af6d01a3" class="">
+          Multilayer Perceptrons (MLP)
+        </h1>
+        <ul id="1f61fd76-1d95-465c-bee8-37854e10aa2d" class="bulleted-list">
+          <li>Obtained by stacking multiple perceptrons.</li>
+        </ul>
+        <ul id="883bf69d-f214-43db-abf4-84dfddb5b568" class="bulleted-list">
+          <li>
+            Is a feed forward neural network - signal flows in only one
+            direction (input to output).
+          </li>
+        </ul>
+        <p id="70060f09-7d5f-4eec-8784-f5648952fc29" class=""></p>
+        <figure id="d27304c5-377f-4565-b4ec-f70a24c79c7b" class="image">
+          <a
+            href="001/006.png"
+            ><img
+              style="width: 1668px"
+              src="001/006.png"
+          /></a>
+        </figure>
+        <ul id="01493c78-afbc-4cba-8af0-407b65389c44" class="bulleted-list">
+          <li>Trained using the backpropagation algorithm.</li>
+        </ul>
+      </div>
+    </article>
+  </body>
+</html>
