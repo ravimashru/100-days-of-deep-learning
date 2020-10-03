@@ -1,0 +1,642 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Day 3 - Backpropagation</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="b84ef20a-ecea-4e7e-9032-14c49aaa3c1f" class="page sans">
+      <header><h1 class="page-title">Day 3 - Backpropagation</h1></header>
+      <div class="page-body">
+        <ul id="87f94a7d-9b19-4c82-9ddb-0614dae75624" class="bulleted-list">
+          <li>One of the algorithms used to train neural networks.</li>
+        </ul>
+        <ul id="1d25260c-64f6-4c75-be0a-61d79539f2ab" class="bulleted-list">
+          <li>
+            Handles one mini-batch at a time, and goes through the full training
+            set multiple times (each pass through the entire set is called an
+            epoch).
+          </li>
+        </ul>
+        <ul id="0ff9eca3-5da6-43e8-847e-9c1ffc4bbbbe" class="bulleted-list">
+          <li>
+            Uses an efficient way to calculate gradients - automatic
+            differentiation.
+          </li>
+        </ul>
+        <ul id="3da211bd-346c-47bb-8af9-59472b2552d7" class="bulleted-list">
+          <li>
+            In essence, it is the gradient descent algorithm:
+            <ul id="18b130c3-a751-4d27-bbf7-220edac4f38a" class="bulleted-list">
+              <li>
+                Each mini-batch is passed through the input of the network, and
+                all intermediate layers until the output layer (aka the forward
+                pass).
+              </li>
+            </ul>
+            <ul id="8620da6a-7e54-4493-89c3-8d871202b6e4" class="bulleted-list">
+              <li>
+                All intermediate results are preserved to be used in the
+                backward pass.
+              </li>
+            </ul>
+            <ul id="b5d9e564-ab98-4854-8196-39e85c8813dd" class="bulleted-list">
+              <li>
+                The algorithm measures the network&#x27;s error using a loss
+                function (compares the network&#x27;s output and actual output
+                and returns a numerical value for the error).
+              </li>
+            </ul>
+            <ul id="6b432a69-5bd6-4618-88e5-c30276171c5b" class="bulleted-list">
+              <li>
+                The error gradient is computed using the chain rule starting
+                from the output layer and propagated all the way back to the
+                input layer (aka the backward pass).
+              </li>
+            </ul>
+            <ul id="9ee8bf5b-db53-451a-91bc-532436403d3a" class="bulleted-list">
+              <li>
+                A gradient descent step is performed to tweak all weights using
+                the error gradients calculated.
+              </li>
+            </ul>
+            <ul id="a32c299a-be43-4d75-ae61-ed9e7ff57bbe" class="bulleted-list">
+              <li>
+                Above steps are repeated until network converges to a solution.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h2 id="2cfc29fc-0341-4e70-892b-a3b2e92c0de4" class="">
+          Automatic Differentiation (autodiff)
+        </h2>
+        <ul id="3cc39240-3dfc-4006-b75a-7ea5736c2eba" class="bulleted-list">
+          <li>
+            Automatic way of computing gradients is known as
+            <strong>automatic differentiation</strong> or
+            <strong>autodiff</strong>.
+          </li>
+        </ul>
+        <ul id="9159436b-bd48-4596-8309-2eedb73e2544" class="bulleted-list">
+          <li>
+            Two types of autodiff:
+            <ul id="35aad126-03e3-4b68-9359-d36e090c78b8" class="bulleted-list">
+              <li>Forward-mode autodiff</li>
+            </ul>
+            <ul id="66deceb9-a670-43b8-bde1-dc406c6f0641" class="bulleted-list">
+              <li>Reverse-mode autodiff</li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="838cdfa7-5f99-49cc-ae29-e5dabd93f3e2" class="bulleted-list">
+          <li>
+            Backpropagation uses <strong>reverse-mode autodiff </strong>which
+            calculates gradients in just two passes through the network:
+            <ul id="2cfbbd6e-c0eb-4831-af96-fd0ce05cb797" class="bulleted-list">
+              <li>
+                Pass 1: forward pass to compute and store computed value at each
+                node.
+              </li>
+            </ul>
+            <ul id="71493d42-0e09-44f6-bff4-069cb458d553" class="bulleted-list">
+              <li>
+                Pass 2: reverse pass to compute all partial derivatives using
+                the chain rule.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="6c96affd-28d5-4f50-a062-d0752c277228" class="bulleted-list">
+          <li>
+            Reverse-mode autodiff requires only one pass per output of the
+            network (i.e. loss function)
+          </li>
+        </ul>
+        <ul id="e8a059c2-7700-46f4-b5fa-16fb0507a66d" class="bulleted-list">
+          <li>
+            TensorFlow implements <strong>symbolic</strong> reverse-mode
+            autodiff - a new computation graph of the derivative is produced
+            instead of calculating values on the fly.
+          </li>
+        </ul>
+        <ul id="9fd7a8d7-fa0b-4147-bad9-0043210a5611" class="bulleted-list">
+          <li>
+            Advantages of symbolic autodiff:
+            <ul id="5d2e3b3d-8f78-43ce-b50c-01fbcc7d8d72" class="bulleted-list">
+              <li>
+                Graph of derivative needs to be computed only once and can be
+                used repeatedly.
+              </li>
+            </ul>
+            <ul id="a29e1777-5259-463f-879f-3fb2caf85519" class="bulleted-list">
+              <li>A graph of a higher order derivative can be generated.</li>
+            </ul>
+          </li>
+        </ul>
+        <h2 id="0092eae1-2636-4182-bf78-f57a222038d5" class="">
+          Initialization of weights
+        </h2>
+        <ul id="81e889af-045e-4746-8763-d360099add5b" class="bulleted-list">
+          <li>All hidden layer weights should be initialized randomly.</li>
+        </ul>
+        <ul id="146b330d-fa0a-4788-aa91-b3c3ee3e50df" class="bulleted-list">
+          <li>
+            If all weights are equal (e.g. equal to zero) then backpropagation
+            affects all of them in the exact same way.
+          </li>
+        </ul>
+        <ul id="346d7780-f4e6-4d64-aeaf-bdcea84a8317" class="bulleted-list">
+          <li>
+            Neurons will remain identical throughout training (model will act as
+            if there is just one neuron per layer).
+          </li>
+        </ul>
+        <ul id="69fb41a1-c9ce-45a3-90cf-43a1bb4c1eb3" class="bulleted-list">
+          <li>
+            Random initialization of weights will break the symmetry and allow
+            backpropagation to train a diverse set of neurons.
+          </li>
+        </ul>
+        <h2 id="ed0248a9-f8b9-4733-ad84-b994330f0612" class="">
+          Change in activation function
+        </h2>
+        <ul id="42bf8ebf-c25e-4b42-85f0-40a181c5890c" class="bulleted-list">
+          <li>
+            Key change in architecture to make backpropagation work: replace
+            step function with logistic (sigmoid) function:
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mi>σ</mi><mo stretchy="false">(</mo><mi>z</mi
+                          ><mo stretchy="false">)</mo><mo>=</mo
+                          ><mfrac
+                            ><mn>1</mn
+                            ><mrow
+                              ><mn>1</mn><mo>+</mo
+                              ><msup
+                                ><mi>e</mi
+                                ><mrow><mo>−</mo><mi>z</mi></mrow></msup
+                              ></mrow
+                            ></mfrac
+                          ></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\sigma(z) = \frac{1}{1 + e^{-z}}</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.03588em"
+                        >σ</span
+                      ><span class="mopen">(</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="
+                          height: 1.2484389999999999em;
+                          vertical-align: -0.403331em;
+                        "
+                      ></span
+                      ><span class="mord"
+                        ><span class="mopen nulldelimiter"></span
+                        ><span class="mfrac"
+                          ><span class="vlist-t vlist-t2"
+                            ><span class="vlist-r"
+                              ><span class="vlist" style="height: 0.845108em"
+                                ><span style="top: -2.655em"
+                                  ><span
+                                    class="pstrut"
+                                    style="height: 3em"
+                                  ></span
+                                  ><span class="sizing reset-size6 size3 mtight"
+                                    ><span class="mord mtight"
+                                      ><span class="mord mtight">1</span
+                                      ><span class="mbin mtight">+</span
+                                      ><span class="mord mtight"
+                                        ><span class="mord mathdefault mtight"
+                                          >e</span
+                                        ><span class="msupsub"
+                                          ><span class="vlist-t"
+                                            ><span class="vlist-r"
+                                              ><span
+                                                class="vlist"
+                                                style="
+                                                  height: 0.7026642857142857em;
+                                                "
+                                                ><span
+                                                  style="
+                                                    top: -2.786em;
+                                                    margin-right: 0.07142857142857144em;
+                                                  "
+                                                  ><span
+                                                    class="pstrut"
+                                                    style="height: 2.5em"
+                                                  ></span
+                                                  ><span
+                                                    class="sizing reset-size3 size1 mtight"
+                                                    ><span class="mord mtight"
+                                                      ><span class="mord mtight"
+                                                        >−</span
+                                                      ><span
+                                                        class="mord mathdefault mtight"
+                                                        style="
+                                                          margin-right: 0.04398em;
+                                                        "
+                                                        >z</span
+                                                      ></span
+                                                    ></span
+                                                  ></span
+                                                ></span
+                                              ></span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ><span style="top: -3.23em"
+                                  ><span
+                                    class="pstrut"
+                                    style="height: 3em"
+                                  ></span
+                                  ><span
+                                    class="frac-line"
+                                    style="border-bottom-width: 0.04em"
+                                  ></span></span
+                                ><span style="top: -3.394em"
+                                  ><span
+                                    class="pstrut"
+                                    style="height: 3em"
+                                  ></span
+                                  ><span class="sizing reset-size6 size3 mtight"
+                                    ><span class="mord mtight"
+                                      ><span class="mord mtight">1</span></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ><span class="vlist-s">​</span></span
+                            ><span class="vlist-r"
+                              ><span class="vlist" style="height: 0.403331em"
+                                ><span></span></span></span></span></span
+                        ><span
+                          class="mclose nulldelimiter"
+                        ></span></span></span></span></span></span
+              ><span>﻿</span></span
+            >.
+          </li>
+        </ul>
+        <ul id="f8f2b343-6c7b-488c-beab-17101fb1aaa2" class="bulleted-list">
+          <li>
+            Step function contains only flat segments, so there is no gradient
+            to work with.
+          </li>
+        </ul>
+        <ul id="0f651ef4-8f8c-456b-bb05-0afb59349c2e" class="bulleted-list">
+          <li>
+            Other popular choices for activation function: hyperbolic tangent
+            and Rectified Linear Unit (ReLU)
+          </li>
+        </ul>
+        <ul id="bdeb3d91-0efb-4208-a258-3bb520e37a23" class="bulleted-list">
+          <li>
+            Hyperbolic tangent:
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mi>tanh</mi><mo>⁡</mo><mo stretchy="false">(</mo
+                          ><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo
+                          ><mn>2</mn><mi>σ</mi><mo stretchy="false">(</mo
+                          ><mn>2</mn><mi>z</mi><mo stretchy="false">)</mo
+                          ><mtext>–</mtext><mn>1</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\tanh(z) = 2σ(2z) – 1</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mop">tanh</span><span class="mopen">(</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mord">2</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.03588em"
+                        >σ</span
+                      ><span class="mopen">(</span><span class="mord">2</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span><span class="mord">–</span
+                      ><span class="mord">1</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            <ul id="7fa81af8-b682-4087-94ab-8f4e8879e4a9" class="bulleted-list">
+              <li>S-shaped</li>
+            </ul>
+            <ul id="1edb0861-ab85-46da-b974-e5358d7ca0bd" class="bulleted-list">
+              <li>Continuous</li>
+            </ul>
+            <ul id="c4b7c5ad-b6dd-475e-b4c9-6870c76e3085" class="bulleted-list">
+              <li>Differentiable</li>
+            </ul>
+            <ul id="6f9eee99-8ded-4ed5-876f-15d9071a880a" class="bulleted-list">
+              <li>
+                Range: -1 to 1 (instead of 0 to 1 like sigmoid) ⇒ each
+                layer&#x27;s output is centered around 0 at the beginning of
+                training which often helps speed up convergence.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="ff58b7ab-38e6-4ddd-9171-cc0b39da6c68" class="bulleted-list">
+          <li>
+            ReLU:
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mtext>ReLU</mtext><mo stretchy="false">(</mo
+                          ><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo
+                          ><mi>m</mi><mi>a</mi><mi>x</mi
+                          ><mo stretchy="false">(</mo><mn>0</mn
+                          ><mo separator="true">,</mo><mi>z</mi
+                          ><mo stretchy="false">)</mo></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\text{ReLU}(z) = max(0, z)</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mord text"
+                        ><span class="mord">ReLU</span></span
+                      ><span class="mopen">(</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mord mathdefault">m</span
+                      ><span class="mord mathdefault">a</span
+                      ><span class="mord mathdefault">x</span
+                      ><span class="mopen">(</span><span class="mord">0</span
+                      ><span class="mpunct">,</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.16666666666666666em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            <ul id="f58dacaf-89be-4fa8-ad28-db67725259fc" class="bulleted-list">
+              <li>Continuous</li>
+            </ul>
+            <ul id="3a326ff9-3966-4998-bd7c-b27eeb3d0f91" class="bulleted-list">
+              <li>
+                Not differentiable at
+                <style>
+                  @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                ><span
+                  data-token-index="0"
+                  contenteditable="false"
+                  class="notion-text-equation-token"
+                  style="
+                    user-select: all;
+                    -webkit-user-select: all;
+                    -moz-user-select: all;
+                  "
+                  ><span></span
+                  ><span
+                    ><span class="katex"
+                      ><span class="katex-mathml"
+                        ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                          ><semantics
+                            ><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow
+                            ><annotation encoding="application/x-tex"
+                              >z=0</annotation
+                            ></semantics
+                          ></math
+                        ></span
+                      ><span class="katex-html" aria-hidden="true"
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="height: 0.43056em; vertical-align: 0em"
+                          ></span
+                          ><span
+                            class="mord mathdefault"
+                            style="margin-right: 0.04398em"
+                            >z</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span
+                          ><span class="mrel">=</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span></span
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="height: 0.64444em; vertical-align: 0em"
+                          ></span
+                          ><span class="mord">0</span></span
+                        ></span
+                      ></span
+                    ></span
+                  ><span>﻿</span></span
+                >
+              </li>
+            </ul>
+            <ul id="4d02bfad-4cb3-4c0b-b0e0-82a925ae882f" class="bulleted-list">
+              <li>
+                Derivative is 0 for
+                <style>
+                  @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                ><span
+                  data-token-index="0"
+                  contenteditable="false"
+                  class="notion-text-equation-token"
+                  style="
+                    user-select: all;
+                    -webkit-user-select: all;
+                    -moz-user-select: all;
+                  "
+                  ><span></span
+                  ><span
+                    ><span class="katex"
+                      ><span class="katex-mathml"
+                        ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                          ><semantics
+                            ><mrow><mi>z</mi><mo>&lt;</mo><mn>0</mn></mrow
+                            ><annotation encoding="application/x-tex"
+                              >z &lt; 0</annotation
+                            ></semantics
+                          ></math
+                        ></span
+                      ><span class="katex-html" aria-hidden="true"
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="height: 0.5782em; vertical-align: -0.0391em"
+                          ></span
+                          ><span
+                            class="mord mathdefault"
+                            style="margin-right: 0.04398em"
+                            >z</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span
+                          ><span class="mrel">&lt;</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span></span
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="height: 0.64444em; vertical-align: 0em"
+                          ></span
+                          ><span class="mord">0</span></span
+                        ></span
+                      ></span
+                    ></span
+                  ><span>﻿</span></span
+                >
+              </li>
+            </ul>
+            <ul id="bf527b4e-b287-46bb-9e39-7fc52754f925" class="bulleted-list">
+              <li>Works well in practice</li>
+            </ul>
+            <ul id="c107f455-0748-4432-8a65-d90f370385f9" class="bulleted-list">
+              <li>Is fast to compute</li>
+            </ul>
+            <ul id="47e01adb-d6fa-4644-8877-8fdfadcb583d" class="bulleted-list">
+              <li>
+                Helps reduce issues of unstable gradients in gradient descent
+                because it doesn&#x27;t have maximum output value
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </body>
+</html>
