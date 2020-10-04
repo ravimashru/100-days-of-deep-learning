@@ -1,0 +1,481 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Day 4 - Regression and Classification using MLPs</title>
+	<link rel="stylesheet" href="../styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+</head>
+
+<body>
+	<article id="65e04d12-bd22-4a6b-8831-f317d421ee54" class="page sans">
+		<header>
+			<h1 class="page-title">Day 4 - Regression and Classification using MLPs</h1>
+		</header>
+		<div class="page-body">
+			<h1 id="4b2bd537-0372-4698-823e-bb25231d7732" class="">MLPs for Regression</h1>
+			<ul id="51657681-562e-4f80-ac00-35e2b74c67fc" class="bulleted-list">
+				<li>Number of neurons in the input layer depends on data.</li>
+			</ul>
+			<ul id="eef6bf57-05da-458a-82e8-bebcea518403" class="bulleted-list">
+				<li>Use one output neuron per output dimension required (e.g. one neuron to predict price of house, two neurons
+					to predict x and y coordinates).</li>
+			</ul>
+			<h2 id="eaf9b163-b33c-4f1f-9b59-b8db39d26115" class="">Choice of activation function</h2>
+			<ul id="4ffe3447-54fc-44e4-bfbd-f4b33c68b90d" class="bulleted-list">
+				<li>Allow output of any range of values: no activation function.</li>
+			</ul>
+			<ul id="a2d1c9c3-677b-4e7e-9e59-59e436cee887" class="bulleted-list">
+				<li>Allow only positive values: ReLU or softplus function.
+					<ul id="56f104f4-7d0a-43c3-9911-ba5770d87778" class="bulleted-list">
+						<li>Softplus is a smooth variant of ReLU, close to 0 when <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>z</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">z</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault"
+													style="margin-right:0.04398em;">z</span></span></span></span></span></span> is
+							negative and close to <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>z</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">z</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault"
+													style="margin-right:0.04398em;">z</span></span></span></span></span><span>﻿</span></span> when <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>z</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">z</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault"
+													style="margin-right:0.04398em;">z</span></span></span></span></span><span>﻿</span></span> is
+							positive.</li>
+					</ul>
+					<ul id="ef51ec31-3093-4da4-b27f-afcc6122003e" class="bulleted-list">
+						<li>
+							<span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mtext>Softplus</mtext>
+														<mo stretchy="false">(</mo>
+														<mi>z</mi>
+														<mo stretchy="false">)</mo>
+														<mo>=</mo>
+														<mi>log</mi>
+														<mo>⁡</mo>
+														<mo stretchy="false">(</mo>
+														<mn>1</mn>
+														<mo>+</mo>
+														<msup>
+															<mi>e</mi>
+															<mi>z</mi>
+														</msup>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{Softplus}(z) = \log (1 + e^{z})</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span
+														class="mord">Softplus</span></span><span class="mopen">(</span><span
+													class="mord mathdefault" style="margin-right:0.04398em;">z</span><span
+													class="mclose">)</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span
+													class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span
+												class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span
+													class="mopen">(</span><span class="mord">1</span><span class="mspace"
+													style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span
+													class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span
+												class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span
+															class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span
+																		style="top:-3.063em;margin-right:0.05em;"><span class="pstrut"
+																			style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span
+																				class="mord mtight"><span class="mord mathdefault mtight"
+																					style="margin-right:0.04398em;">z</span></span></span></span></span></span></span></span></span><span
+													class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<ul id="8abe549c-d383-424a-b0f5-41eb396a4d1d" class="bulleted-list">
+				<li>Allow values within a given range:<ul id="366003a2-900f-4b63-8007-a96cc4931565" class="bulleted-list">
+						<li>Logistic function and scale, for values between 0 and <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mtext>scale</mtext>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{scale}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.69444em;vertical-align:0em;"></span><span class="mord text"><span
+														class="mord">scale</span></span></span></span></span></span><span>﻿</span></span>.</li>
+					</ul>
+					<ul id="fbc4ac3d-d1a6-4369-a772-e7988e0ae0b0" class="bulleted-list">
+						<li>Hyperbolic tangent function and scale, for values between <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mtext>-scale</mtext>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{-scale}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.69444em;vertical-align:0em;"></span><span class="mord text"><span
+														class="mord">-scale</span></span></span></span></span></span><span>﻿</span></span> to
+							<span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mtext>scale</mtext>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{scale}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.69444em;vertical-align:0em;"></span><span class="mord text"><span
+														class="mord">scale</span></span></span></span></span></span><span>﻿</span></span>.</li>
+					</ul>
+				</li>
+			</ul>
+			<h2 id="2a4b7135-9b27-443a-8293-90481370f1e7" class="">Choice of loss function</h2>
+			<ul id="fde78c0e-8c0c-4347-9a9c-9961075771ff" class="bulleted-list">
+				<li>Mean Squared Error (MSE)</li>
+			</ul>
+			<ul id="429900e2-39c6-49a4-87ff-73c3a730316e" class="bulleted-list">
+				<li>Mean Absolute Error (MAE) - suitable when there are outliers in the data</li>
+			</ul>
+			<ul id="41b345b6-5222-47ff-b7ba-9e13f018aae2" class="bulleted-list">
+				<li>Huber loss - combination of both of the above:<ul id="324da6c5-0044-4898-8b1d-b21f039ef340"
+						class="bulleted-list">
+						<li>Quadratic when error is smaller than a threshold (<span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>δ</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">\delta</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault"
+													style="margin-right:0.03785em;">δ</span></span></span></span></span><span>﻿</span></span>),
+							usually 1 - allows to converge faster and be more preecise than MAE.</li>
+					</ul>
+					<ul id="6c736cb7-b127-4564-8eb1-710ca68d9381" class="bulleted-list">
+						<li>Linear when error larger than threshold (<span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>δ</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">\delta</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+													style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault"
+													style="margin-right:0.03785em;">δ</span></span></span></span></span><span>﻿</span></span>) -
+							makes it less sensitive to outliers.</li>
+					</ul>
+				</li>
+			</ul>
+			<p id="39be7b35-492f-41d5-a9fe-1a9091c52c2f" class="">
+			</p>
+			<div id="350c10df-2cc4-4314-a6fe-6c50168f8bc5" class="collection-content">
+				<h4 class="collection-title">Typical MLP architecture for Regression</h4>
+				<table class="collection-content">
+					<thead>
+						<tr>
+							<th>Hyperparameter</th>
+							<th>Typical value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="311c8283-b5a1-4045-86e0-708cd1ab76c9">
+							<td class="cell-title">Number of neurons in input layer</td>
+							<td class="cell-gUJt">Equal to number of input features</td>
+						</tr>
+						<tr id="1f4baa8a-12ee-426a-8f15-771544d1a637">
+							<td class="cell-title">Number of hidden layers</td>
+							<td class="cell-gUJt">Depends on the problem (typically 1 to 5)</td>
+						</tr>
+						<tr id="b1fef950-8046-4cc0-80e4-ad4159959578">
+							<td class="cell-title">Number of neurons per hidden layer</td>
+							<td class="cell-gUJt">Depends on the problem (typically 10 to 100)</td>
+						</tr>
+						<tr id="c787a4c3-3978-4cae-929c-d7c969b13231">
+							<td class="cell-title">Number of neurons in output layer</td>
+							<td class="cell-gUJt">Equal to number of prediction dimensions</td>
+						</tr>
+						<tr id="027da778-ba12-4811-8672-ba2b27b159ec">
+							<td class="cell-title">Hidden layer activation</td>
+							<td class="cell-gUJt">ReLU or SeLU</td>
+						</tr>
+						<tr id="acd90eda-e45e-490f-80ab-59f56ff2314f">
+							<td class="cell-title">Output activation</td>
+							<td class="cell-gUJt">None
+								ReLU/softplus for positive outputs
+								Logistic/tanh with scaling for bounded outputs</td>
+						</tr>
+						<tr id="01fddbc8-13be-40ec-817a-fd5d49d2cd35">
+							<td class="cell-title">Loss function</td>
+							<td class="cell-gUJt">MSE
+								MAE/Huber if there are outliers</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p id="1155ea41-36e2-4825-a8c8-4888ae892f6f" class="">
+			</p>
+			<h1 id="9aaa59e9-7def-4ba7-9487-37877de6d108" class="">MLPs for Classification</h1>
+			<h2 id="d3b32459-3723-4f78-a2df-2bcb853bf3da" class="">Binary classification</h2>
+			<ul id="5ad01454-9112-4ffd-8823-37da868d6e48" class="bulleted-list">
+				<li>Use single output neuron using logistic activation.</li>
+			</ul>
+			<ul id="8780b51b-61d0-4aa0-8e47-2c8fd25276ca" class="bulleted-list">
+				<li>Output between 0 and 1 can be trated as estimated probability of positive class.</li>
+			</ul>
+			<ul id="bad150b2-2b6f-4724-bc07-9699713b2356" class="bulleted-list">
+				<li>Probability of negative class = 1 - output of network.</li>
+			</ul>
+			<p id="5c4bbc24-d138-4939-907e-2baab718949d" class="">
+			</p>
+			<h2 id="bfc503b3-580a-4b7c-bb09-c4ffaa56b3b9" class="">Multilabel binary classification</h2>
+			<ul id="a2c3bda8-ea20-4de0-88eb-49c35faea89a" class="bulleted-list">
+				<li>Use multiple neurons with each using logistic activation function.</li>
+			</ul>
+			<ul id="5601ae92-b439-4b94-a6df-f063736a0488" class="bulleted-list">
+				<li>Use one output neuron for each positive class.</li>
+			</ul>
+			<ul id="9dab3131-0a02-4c91-a854-91354576cc48" class="bulleted-list">
+				<li>The output classes are not exclusive (an instance can belong to multiple classes at once) so the output
+					probabilities don&#x27;t add up to 1.</li>
+			</ul>
+			<h2 id="a89985ea-cee7-403f-b980-05bb7bebd4b9" class="">Multiclass classification</h2>
+			<ul id="2fc90d89-eb9c-4fb9-b58c-c14b0d87a425" class="bulleted-list">
+				<li>The output classes are exclusive (each instance can belong to only one of multiple classes).</li>
+			</ul>
+			<ul id="d912b41a-4cad-401b-8c96-d6a8dbb46b71" class="bulleted-list">
+				<li>Use one output neuron per class with softmax activation in the output layer.</li>
+			</ul>
+			<ul id="4e5afbd1-f1e0-4a8c-b2ea-430679b88e33" class="bulleted-list">
+				<li>All outputs will be between 0 and 1, and add up to 1.</li>
+			</ul>
+			<h2 id="c0a0da97-8085-44d1-b288-7d763ec67da2" class="">Choice of loss function</h2>
+			<p id="b3a24f41-878a-4af4-aaef-011423be8f1f" class="">Cross-entropy loss (a.k.a log loss) is a good choice for
+				loss function:<div class="indented">
+					<p id="4da013af-b90b-4bb4-9e20-3cb7534bf340" class=""><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+									class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+											<semantics>
+												<mrow>
+													<mo>−</mo>
+													<mstyle scriptlevel="0" displaystyle="true">
+														<munder>
+															<mo>∑</mo>
+															<mi>c</mi>
+														</munder>
+														<msub>
+															<mi>y</mi>
+															<mi>c</mi>
+														</msub>
+														<mo>⋅</mo>
+														<mi>log</mi>
+														<mo>⁡</mo>
+														<mo stretchy="false">(</mo>
+														<msub>
+															<mi>p</mi>
+															<mi>c</mi>
+														</msub>
+														<mo stretchy="false">)</mo>
+													</mstyle>
+												</mrow>
+												<annotation encoding="application/x-tex">- \displaystyle \sum_{c} y_c \cdot \log(p_c)
+												</annotation>
+											</semantics>
+										</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+												style="height:2.3000100000000003em;vertical-align:-1.250005em;"></span><span
+												class="mord">−</span><span class="mspace"
+												style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span
+													class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+															style="height:1.050005em;"><span style="top:-1.8999949999999999em;margin-left:0em;"><span
+																	class="pstrut" style="height:3.05em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span
+																			class="mord mathdefault mtight">c</span></span></span></span><span
+																style="top:-3.0500049999999996em;"><span class="pstrut"
+																	style="height:3.05em;"></span><span><span
+																		class="mop op-symbol large-op">∑</span></span></span></span><span
+															class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist"
+															style="height:1.250005em;"><span></span></span></span></span></span><span class="mspace"
+												style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+													class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+														class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																style="height:0.151392em;"><span
+																	style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																		class="pstrut" style="height:2.7em;"></span><span
+																		class="sizing reset-size6 size3 mtight"><span
+																			class="mord mathdefault mtight">c</span></span></span></span><span
+																class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist"
+																style="height:0.15em;"><span></span></span></span></span></span></span><span
+												class="mspace" style="margin-right:0.2222222222222222em;"></span><span
+												class="mbin">⋅</span><span class="mspace"
+												style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut"
+												style="height:1em;vertical-align:-0.25em;"></span><span class="mop">lo<span
+													style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span
+												class="mord"><span class="mord mathdefault">p</span><span class="msupsub"><span
+														class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																style="height:0.151392em;"><span
+																	style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																		class="pstrut" style="height:2.7em;"></span><span
+																		class="sizing reset-size6 size3 mtight"><span
+																			class="mord mathdefault mtight">c</span></span></span></span><span
+																class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist"
+																style="height:0.15em;"><span></span></span></span></span></span></span><span
+												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+					</p>
+					<p id="9760f510-efe5-448d-ab9d-dd05b245fdab" class="">
+						<span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+									class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+											<semantics>
+												<mrow>
+													<msub>
+														<mi>y</mi>
+														<mi>c</mi>
+													</msub>
+													<mo>=</mo>
+													<mn>1</mn>
+												</mrow>
+												<annotation encoding="application/x-tex">y_c = 1</annotation>
+											</semantics>
+										</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+												style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span
+													class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+														class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																style="height:0.151392em;"><span
+																	style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																		class="pstrut" style="height:2.7em;"></span><span
+																		class="sizing reset-size6 size3 mtight"><span
+																			class="mord mathdefault mtight">c</span></span></span></span><span
+																class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist"
+																style="height:0.15em;"><span></span></span></span></span></span></span><span
+												class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+												class="mrel">=</span><span class="mspace"
+												style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut"
+												style="height:0.64444em;vertical-align:0em;"></span><span
+												class="mord">1</span></span></span></span></span><span>﻿</span></span> if <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+									class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+											<semantics>
+												<mrow>
+													<mi>c</mi>
+												</mrow>
+												<annotation encoding="application/x-tex">c</annotation>
+											</semantics>
+										</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+												style="height:0.43056em;vertical-align:0em;"></span><span
+												class="mord mathdefault">c</span></span></span></span></span><span>﻿</span></span> is the right
+						class, and 0 otherwise.
+					</p>
+					<p id="84c5ee3f-249c-4a99-bc52-10586021cf67" class=""><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+									class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+											<semantics>
+												<mrow>
+													<msub>
+														<mi>p</mi>
+														<mi>c</mi>
+													</msub>
+												</mrow>
+												<annotation encoding="application/x-tex">p_c</annotation>
+											</semantics>
+										</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+												style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span
+													class="mord mathdefault">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span
+															class="vlist-r"><span class="vlist" style="height:0.151392em;"><span
+																	style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																		class="pstrut" style="height:2.7em;"></span><span
+																		class="sizing reset-size6 size3 mtight"><span
+																			class="mord mathdefault mtight">c</span></span></span></span><span
+																class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist"
+																style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+						is the probability the network predicts for class <span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+									class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+											<semantics>
+												<mrow>
+													<mi>c</mi>
+												</mrow>
+												<annotation encoding="application/x-tex">c</annotation>
+											</semantics>
+										</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut"
+												style="height:0.43056em;vertical-align:0em;"></span><span
+												class="mord mathdefault">c</span></span></span></span></span><span>﻿</span></span>.
+					</p>
+					<p id="d3b2c156-19ec-48e4-8d0e-32d8a8a5c9d7" class="">
+					</p>
+				</div>
+			</p>
+			<div id="7b22ebbb-b350-4b39-93e7-9e3975b02e44" class="collection-content">
+				<h4 class="collection-title">Typical MLP architecture for Classification</h4>
+				<table class="collection-content">
+					<thead>
+						<tr>
+							<th>Hyperparameter</th>
+							<th>Binary classification</th>
+							<th>Multilabel binary classification</th>
+							<th>Multiclass classification</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="06ab71fe-a6e2-42c9-beed-81fe0f5c4065">
+							<td class="cell-title">Number of input and hidden layers</td>
+							<td class="cell-T_Ww">Same as regression</td>
+							<td class="cell-=wNm">Same as regression</td>
+							<td class="cell-`\JY">Same as regression</td>
+						</tr>
+						<tr id="0b6a877f-1079-4a71-ac8e-0f6a9a44f6e1">
+							<td class="cell-title">Number of neurons in output layer</td>
+							<td class="cell-T_Ww">1</td>
+							<td class="cell-=wNm">1 per label</td>
+							<td class="cell-`\JY">1 per class</td>
+						</tr>
+						<tr id="0c4434d1-f7a8-41b3-8777-3f85d0322ddc">
+							<td class="cell-title">Output layer activation function</td>
+							<td class="cell-T_Ww">Logistic</td>
+							<td class="cell-=wNm">Logistic</td>
+							<td class="cell-`\JY">Softmax</td>
+						</tr>
+						<tr id="613e4f84-d976-4b95-849e-0d5a36edb771">
+							<td class="cell-title">Loss function</td>
+							<td class="cell-T_Ww">Cross entropy</td>
+							<td class="cell-=wNm">Cross entropy</td>
+							<td class="cell-`\JY">Cross entropy</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</article>
+</body>
+
+</html>
