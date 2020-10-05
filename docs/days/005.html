@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 5 - Using the Keras Sequential API</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="a7ff025b-7d5f-49df-96b3-8f0a8355198c" class="page sans">
+      <header>
+        <h1 class="page-title">Day 5 - Using the Keras Sequential API</h1>
+      </header>
+      <div class="page-body">
+        <ul id="ac80fb2f-2955-4f42-9d6a-72a8c27872c8" class="bulleted-list">
+          <li>
+            Sequential API can be used to create the simplest kind of neural
+            networks: composed of a single stack of layers connected
+            sequentially.
+          </li>
+        </ul>
+        <ul id="f0d3f6f8-0265-4528-acae-12663cb008ed" class="bulleted-list">
+          <li>
+            The first layer can be a <code>Flatten</code> layer (which converts
+            multidimensional input e.g. an image into a 1-dimensional array) or
+            an <code>InputLayer</code>.
+          </li>
+        </ul>
+        <ul id="c415365d-cf79-48e3-9d04-fa10de492826" class="bulleted-list">
+          <li>
+            Each dense layer has its own matrix of connection weights between
+            the neurons and their inputs, and a vector of bias terms per neuron.
+          </li>
+        </ul>
+        <ul id="c75e5248-5f55-4ecf-bdf7-ce1bc6170b1b" class="bulleted-list">
+          <li>
+            The shape of the weight matrix depends on the number of inputs. If
+            the input shape is not specified in the first layer, Keras will wait
+            until the <code>build()</code> method is called or training is
+            started to infer the input size.
+          </li>
+        </ul>
+        <ul id="3660a994-3c11-48ea-8339-e9014d778979" class="bulleted-list">
+          <li>
+            Until the input size is known, operations like printing the model
+            summary or saving the model cannot be performed.
+          </li>
+        </ul>
+        <ul id="75d1f6e5-cdf1-49f6-b893-625280c88fe8" class="bulleted-list">
+          <li>
+            After a model is built, it needs to be compiled with: optimizer to
+            use (e.g. sgd), the loss function to use, and a list of extra
+            metrics to compute during training and evaluation.
+          </li>
+        </ul>
+        <h1 id="6744cb99-1b62-4864-9841-59a4df74790e" class="">
+          Using the Sequential API for Classification
+        </h1>
+        <ul id="0e68bd9f-827c-412b-92e1-29071d6e5c2b" class="bulleted-list">
+          <li>
+            If the labels are sparse (i.e. a target class index is used for each
+            data point) and the classes are exclusive, use the
+            <code>sparse_categorical_crossentropy</code> loss function.
+          </li>
+        </ul>
+        <ul id="e1341a29-468f-4ece-a159-1dd2f2fe8aa7" class="bulleted-list">
+          <li>
+            If the labels are one-hot encoded vectors, use the
+            <code>categorical_crossentropy</code> loss function.
+          </li>
+        </ul>
+        <ul id="3528dd7e-36c5-4410-8ec1-05ea5612cd8d" class="bulleted-list">
+          <li>
+            If the training set is skewed, the <code>class_weight</code> or
+            <code>sample_weight</code> arguments can be used.
+          </li>
+        </ul>
+        <figure id="6580f818-ac4f-44cf-98b7-2e1e79d9d2d1">
+          <a
+            href="https://colab.research.google.com/drive/1ruedURF28qS6nc3taVSQ1P1LssxqqUTV?usp=sharing"
+            class="bookmark source"
+            ><div class="bookmark-info">
+              <div class="bookmark-text">
+                <div class="bookmark-title">Google Colaboratory</div>
+              </div>
+              <div class="bookmark-href">
+                <img
+                  src="https://colab.research.google.com/favicon.ico"
+                  class="icon bookmark-icon"
+                />https://colab.research.google.com/drive/1ruedURF28qS6nc3taVSQ1P1LssxqqUTV?usp=sharing
+              </div>
+            </div>
+            <img
+              src="https://colab.research.google.com/img/colab_favicon_256px.png"
+              class="bookmark-image"
+          /></a>
+          <figcaption>
+            Using the Keras Sequential API to train a classification model on
+            the Fashion MNIST dataset
+          </figcaption>
+        </figure>
+        <h1 id="3a5f0b10-5307-40e5-a3b7-8b2299dcbbd6" class="">
+          Using the Sequential API for Regression
+        </h1>
+        <ul id="28798c15-90d0-4c9a-99e4-9ca3b21eb57b" class="bulleted-list">
+          <li>Output layer has a single neuron with no activation function.</li>
+        </ul>
+        <ul id="543ba80e-6410-4c41-b53c-49f1edd60fe9" class="bulleted-list">
+          <li>Mean Squared Error used as a loss function.</li>
+        </ul>
+        <figure id="903af844-5e7d-44a2-b4ea-27bcfd5218a2">
+          <a
+            href="https://colab.research.google.com/drive/1ttkCjEBxpDgvT6bQvuJSFKI5CcHcQBJM?usp=sharing"
+            class="bookmark source"
+            ><div class="bookmark-info">
+              <div class="bookmark-text">
+                <div class="bookmark-title">Google Colaboratory</div>
+              </div>
+              <div class="bookmark-href">
+                <img
+                  src="https://colab.research.google.com/favicon.ico"
+                  class="icon bookmark-icon"
+                />https://colab.research.google.com/drive/1ttkCjEBxpDgvT6bQvuJSFKI5CcHcQBJM?usp=sharing
+              </div>
+            </div>
+            <img
+              src="https://colab.research.google.com/img/colab_favicon_256px.png"
+              class="bookmark-image"
+          /></a>
+          <figcaption>
+            Using the Keras Sequential API to train a regression model on the
+            California housing dataset
+          </figcaption>
+        </figure>
+      </div>
+    </article>
+  </body>
+</html>
