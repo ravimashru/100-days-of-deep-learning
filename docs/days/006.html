@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 6 - Using the Keras Functional API</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="b3d6cbb6-2b4f-4614-a7bc-2b17dc1d5de2" class="page sans">
+      <header>
+        <h1 class="page-title">Day 6 - Using the Keras Functional API</h1>
+      </header>
+      <div class="page-body">
+        <ul id="761157c3-d3dd-47ea-939d-d17dca7d8765" class="bulleted-list">
+          <li>
+            The functional API can be used to build nonsequential networks (e.g.
+            wide &amp; deep neural networks) which can make it possible for
+            neural networks to learn both deep patterns (using the deep path)
+            and simple rules (through thee short path).
+          </li>
+        </ul>
+        <ul id="c2bdb960-53b5-43ca-b9f1-5fef5cc8598a" class="bulleted-list">
+          <li>
+            A model created using the functional API has to be compiled,
+            trained, evaluated and used to make predictions the same way as a
+            model created using the sequential API.
+          </li>
+        </ul>
+        <ul id="81c2c755-6cd2-4f00-8d90-12749d5487e2" class="bulleted-list">
+          <li>
+            A model can have multiple inputs. A different subset of features can
+            be passed through different inputs.
+          </li>
+        </ul>
+        <ul id="9d083f2a-e411-4672-8579-f0a79d22e080" class="bulleted-list">
+          <li>
+            When calling the <code>fit</code>, <code>evaluate</code> and
+            <code>predict</code> methods, a list of matrices has to be passed -
+            one per input.
+          </li>
+        </ul>
+        <ul id="e5350b63-69b5-4bb2-9db6-48e7731b7e3c" class="bulleted-list">
+          <li>
+            A model can also have multiple outputs when:
+            <ul id="f0816731-3b26-4e8c-ba26-f5ec8c6c5bb9" class="bulleted-list">
+              <li>
+                The task demands it - predicting the position (regression - x
+                and y coordinates) and class of an object (classification).
+              </li>
+            </ul>
+            <ul id="3edb52ce-0f96-4e95-877e-5ceee8149839" class="bulleted-list">
+              <li>
+                The are multiple independent tasks based on the same data.
+                Multiple outputs is better than training a single neural network
+                per task because a single neural network can learn features in
+                the data that are useful across tasks.
+              </li>
+            </ul>
+            <ul id="ab639d3f-ccf0-4f2d-9bc6-e052240d49c4" class="bulleted-list">
+              <li>
+                It is used as a regularization technique - auxiliary outputs can
+                be added to ensure lower layers are learning something useful on
+                their own without relying on the rest of the network.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="f591d7a3-fcda-426d-a413-edf320366f02" class="bulleted-list">
+          <li>
+            When using multiple outputs, each output needs its own loss
+            function.
+          </li>
+        </ul>
+        <ul id="1fb76679-ff05-43a8-a260-e56c14638124" class="bulleted-list">
+          <li>
+            An instance of a Keras <code>Model</code> has to be created
+            specifying which inputs and outputs to use.
+          </li>
+        </ul>
+        <ul id="c3ffd34c-3286-46ea-96ed-04c8bac477c0" class="bulleted-list">
+          <li>
+            Keras will compute all losses and add them up to get the final loss
+            used for training.
+          </li>
+        </ul>
+        <ul id="2e821c78-ed65-4880-b02d-4baad3adb0b1" class="bulleted-list">
+          <li>
+            It is possible to set different weights for each loss function (e.g.
+            to give the final output loss more importance than the auxiliary
+            output loss) using the <code>loss_weights</code> parametere.
+          </li>
+        </ul>
+        <ul id="ac49e6a7-f0ca-4bdb-807b-3625212acac6" class="bulleted-list">
+          <li>
+            When training the model, labels need to be provided for each of the
+            outputs.
+          </li>
+        </ul>
+        <ul id="4f231d73-5ae4-4579-9d0f-36e573f5a6b7" class="bulleted-list">
+          <li>
+            When evaluating the model, the individual losses and the total loss
+            is returned.
+          </li>
+        </ul>
+        <ul id="8025a7f8-a08a-492e-a3d0-ed744121c1ef" class="bulleted-list">
+          <li>
+            The <code>predict</code> method returns a prediction for each of the
+            outputs.
+          </li>
+        </ul>
+        <p id="6eb78b2b-f8b5-4e2c-95e3-d408bb06c6f9" class=""></p>
+      </div>
+    </article>
+  </body>
+</html>
