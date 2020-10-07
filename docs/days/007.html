@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+      Day 7 - Building Dynamic Models with the Keras Subclassing API
+		</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="ae3a0e1c-ab31-4033-bcb7-65c632455146" class="page sans">
+      <header>
+        <h1 class="page-title">
+          Day 7 - Building Dynamic Models with the Keras Subclassing API
+        </h1>
+      </header>
+      <div class="page-body">
+        <ul id="fa137fc5-6188-44aa-848d-a793b3d1b2e3" class="bulleted-list">
+          <li>
+            Sequential and Functional APIs are declarative: first declare which
+            layers are required and how they are connected. Data can be fed only
+            after that. Model is a static graph of layers.
+          </li>
+        </ul>
+        <ul id="70b23e8a-d1bd-42f9-becb-c5413cc0fcbc" class="bulleted-list">
+          <li>
+            Subclassing API allows an imperative programming style. Loops,
+            varying shapes, conditional branching and other dynamic behaviors
+            can be added.
+          </li>
+        </ul>
+        <ul id="01dddcff-8865-45bb-afe4-d9f1fdb34445" class="bulleted-list">
+          <li>
+            To use the Subclassing API:
+            <ul id="96854ac6-d5b5-4a3b-90a0-e61c633b3fc8" class="bulleted-list">
+              <li>Subclass the <code>keras.Model</code> class.</li>
+            </ul>
+            <ul id="dcbd77af-3f60-4e18-ae8b-9ff9bc39bdcb" class="bulleted-list">
+              <li>Create the layers you need in the constructor.</li>
+            </ul>
+            <ul id="07b37df7-4aae-497b-ad52-13b35aa6fc19" class="bulleted-list">
+              <li>
+                Perform the computations in the <code>call()</code> method.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="101501a6-4967-487e-b47d-17b76b1eb827" class="bulleted-list">
+          <li>
+            Advantages:
+            <ul id="b4c3c697-bbef-4348-bb70-1a53373cc047" class="bulleted-list">
+              <li>
+                High flexibility - anything can be done within the
+                <code>call()</code> method.
+              </li>
+            </ul>
+            <ul id="d1677d0d-1b3e-493f-8f41-c0c02608b1b5" class="bulleted-list">
+              <li>
+                Models can be used as regular layers so they can be combined to
+                build complex architectures.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="56e4be8b-ae77-4d21-8354-bb5da29fe3ff" class="bulleted-list">
+          <li>
+            Disadvantages:
+            <ul id="64190c4a-e2a9-4817-a465-31702ec18fdf" class="bulleted-list">
+              <li>
+                Model architecture hidden in <code>call()</code> method so Keras
+                cannot easily inspect, save or clone it.
+              </li>
+            </ul>
+            <ul id="874ed602-5380-46a5-bc76-49978da75204" class="bulleted-list">
+              <li>
+                The <code>summary()</code> method only gives list of layers and
+                no information about how they are connected to each other.
+              </li>
+            </ul>
+            <ul id="eb25b73c-3c17-46ac-b40c-c99d30b41564" class="bulleted-list">
+              <li>
+                Keras cannot check types and shapes ahead of time, so it is
+                easier to make mistakes.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <p id="abada4fb-6f36-43a6-83ab-5300a0c8f5f1" class=""></p>
+      </div>
+    </article>
+  </body>
+</html>
