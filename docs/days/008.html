@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 8 - Saving and Restoring Models</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="1826aaff-0f0f-4ce8-8f71-aeb42b010087" class="page sans">
+      <header>
+        <h1 class="page-title">Day 8 - Saving and Restoring Models</h1>
+      </header>
+      <div class="page-body">
+        <ul id="4f7eb651-9827-47e3-90b8-81567f026b26" class="bulleted-list">
+          <li>
+            Models created using the sequential or functional API can be saved
+            using the <code>save()</code> method.
+          </li>
+        </ul>
+        <pre
+          id="8d7c5882-b21c-4859-8e53-221cae477545"
+          class="code"
+        ><code>model = keras.layers.Sequential([...])
+model.compile(...)
+model.fit(...)
+model.save(&quot;my_model.h5&quot;)</code></pre>
+        <ul id="49daaca7-ef24-43bc-bbd1-bb98587cc9a3" class="bulleted-list">
+          <li>
+            Keras uses the HDF5 format to save:
+            <ul id="12a03f87-3610-4ab8-9440-05910de04098" class="bulleted-list">
+              <li>
+                model&#x27;s architecture (all layers and their hyperparameters)
+              </li>
+            </ul>
+            <ul id="5a843276-e16a-4f83-a108-6ea15d2e40d1" class="bulleted-list">
+              <li>
+                values of all parameters (every layer&#x27;s weights and biases)
+              </li>
+            </ul>
+            <ul id="ebd74577-031e-47fe-b704-21c871b41cac" class="bulleted-list">
+              <li>the optimizer and its hyperparameters and state</li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="936f45b1-f52c-46be-93c4-95d73ca52577" class="bulleted-list">
+          <li>The model can be loaded as follows:</li>
+        </ul>
+        <pre
+          id="4e29ad4b-4613-4dd3-9a40-b880cf316350"
+          class="code"
+        ><code>model = keras.models.load_model(&quot;my_model.h5&quot;)</code></pre>
+        <ul id="9f1b916c-401b-4439-9076-33f130fc64d3" class="bulleted-list">
+          <li>
+            When using model subclassing, this approach can not be used. In this
+            case, the model parameters can be saved and restored using the
+            <code>save_weights()</code> and <code>load_weights()</code> methods.
+          </li>
+        </ul>
+        <ul id="b7dbdd99-92b3-4273-be3c-0966b944e1dc" class="bulleted-list">
+          <li>
+            When training for long hours, it is a good practice to save model at
+            regular intervals during training instead of just saving at the end
+            of training. This can be done using <strong>callbacks</strong>.
+          </li>
+        </ul>
+      </div>
+    </article>
+  </body>
+</html>
