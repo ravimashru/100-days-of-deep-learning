@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 9 - Using Callbacks in Keras</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="c65ac9b9-3a82-44f8-b833-8e1848db83fa" class="page sans">
+      <header>
+        <h1 class="page-title">Day 9 - Using Callbacks in Keras</h1>
+      </header>
+      <div class="page-body">
+        <ul id="48c15d01-d076-4fd3-b4f1-d7a80c0d0752" class="bulleted-list">
+          <li>
+            A list of callbacks can be passed to the <code>fit()</code> method.
+          </li>
+        </ul>
+        <ul id="78c86ff8-8776-4bc5-b45c-c4ce4c62ca27" class="bulleted-list">
+          <li>
+            Keras calls callbacks at:
+            <ul id="627d253c-e3ce-428a-b53b-d5545187a4a8" class="bulleted-list">
+              <li>start and end of <strong>training</strong></li>
+            </ul>
+            <ul id="327d19e6-7b05-4c07-94d1-3846446f4b81" class="bulleted-list">
+              <li>start and end of an <strong>epoch</strong></li>
+            </ul>
+            <ul id="8cefc56a-52b3-4237-b650-7a7957020b27" class="bulleted-list">
+              <li>before and after processing each <strong>batch</strong></li>
+            </ul>
+            <p id="778548bf-2fe7-4a5b-8330-b2e1c6bb3734" class=""></p>
+          </li>
+        </ul>
+        <h3 id="f66ddf31-3e52-4a34-b7da-e8e75f185ec0" class="">
+          <code>ModelCheckpoint</code> callback
+        </h3>
+        <ul id="7f76cac9-e95b-4f7f-a8ef-b4b783434bd5" class="bulleted-list">
+          <li>
+            Saves checkpoints of model at regular intervals during training.
+          </li>
+        </ul>
+        <ul id="b5a64da6-2f71-4e4a-97c7-084e58d8cdc7" class="bulleted-list">
+          <li>
+            If a validation set is used during training,
+            <code>save_best_only=True</code> will save weights only if
+            performance on validation set is best so far.
+          </li>
+        </ul>
+        <ul id="31a84725-b94e-463c-a84e-daba03a6b61f" class="bulleted-list">
+          <li>
+            No need to worry about training too long and overfitting on training
+            set. Restore last model after training. This will be best model on
+            training set.
+          </li>
+        </ul>
+        <p id="9230548e-dd54-44e4-bc86-e1eec7e7bb86" class=""></p>
+        <h3 id="472792c7-3f14-4ebe-a73a-98277bc14f2c" class="">
+          <code>EarlyStopping</code> callback
+        </h3>
+        <ul id="b504c4ff-ab65-4bc2-a9d0-2cae2108d2b2" class="bulleted-list">
+          <li>
+            Training is stopped when there is no progress on validation set for
+            a given number of epochs (defined by the
+            <code>patience</code> argument).
+          </li>
+        </ul>
+        <ul id="0eac651f-ec71-4081-9585-e34e1b93da52" class="bulleted-list">
+          <li>Optionally, can roll back to the best model.</li>
+        </ul>
+        <ul id="e9f44c9f-a8fa-453e-8ca9-b907d236b3ad" class="bulleted-list">
+          <li>
+            Set number of epochs to large value since training will stop
+            automatically when there is no progress.
+          </li>
+        </ul>
+        <p id="8616df67-2636-465e-b6aa-29661cbc5a8e" class=""></p>
+        <h3 id="87baa10b-0b67-441c-9977-38fccab6a450" class="">
+          Custom callbacks
+        </h3>
+        <ul id="49ed9562-bf10-4916-9391-9a623314c086" class="bulleted-list">
+          <li>Extend the <code>keras.callbacks.Callback</code> class.</li>
+        </ul>
+        <ul id="a9fcbb65-c857-483b-bf8a-9b6719cb3298" class="bulleted-list">
+          <li>
+            For callback to be used during training, implement methods:
+            <code>on_train_begin()</code>, <code>on_train_end()</code>,
+            <code>on_epoch_begin()</code>, <code>on_epoch_end()</code>,
+            <code>on_batch_begin()</code> and <code>on_batch_end()</code>.
+          </li>
+        </ul>
+        <ul id="477a7bf8-7611-4765-966d-1fb548a73f95" class="bulleted-list">
+          <li>
+            For callbacks to be used during evaluation, implement methods:
+            <code>on_test_begin()</code>, <code>on_test_end()</code>,
+            <code>on_test_batch_begin()</code>, and
+            <code>on_test_batch_end()</code>.
+          </li>
+        </ul>
+        <ul id="c8d641e1-f1cc-441b-9f05-8567422bfff1" class="bulleted-list">
+          <li>
+            For callbacks to be used during prediction, implement methods:
+            <code>on_predict_begin()</code>, <code>on_predict_end()</code>,
+            <code>on_predict_batch_begin()</code> and
+            <code>on_predict_batch_end()</code>.
+          </li>
+        </ul>
+        <ul id="71f3fa6d-4cb9-4e09-a782-ed1211c42c9a" class="bulleted-list">
+          <li>
+            Using callbacks during evaluation and prediction can be useful for
+            debugging.
+          </li>
+        </ul>
+      </div>
+    </article>
+  </body>
+</html>
