@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 10 - Using TensorBoard for Visualization</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="d6128298-4e8a-4026-83ce-659dd86c758b" class="page sans">
+      <header>
+        <h1 class="page-title">Day 10 - Using TensorBoard for Visualization</h1>
+      </header>
+      <div class="page-body">
+        <ul id="ff3de3e4-6f3e-4c1b-ac7d-12ae6d682b66" class="bulleted-list">
+          <li>
+            TensorBoard is an interactive visualization tool that can be used to
+            view learning curves during training, compare them between multiple
+            runs, visualize the computation graph of the network, etc.
+          </li>
+        </ul>
+        <ul id="ff52f735-06da-43ce-a52a-a268ab60fa93" class="bulleted-list">
+          <li>
+            Data to be visualized has to be output into special binary log files
+            - <strong>event files</strong>.
+          </li>
+        </ul>
+        <ul id="60c17b13-207f-45a1-85b9-c8f734fff5bd" class="bulleted-list">
+          <li>Each binary data record is called a <strong>summary</strong>.</li>
+        </ul>
+        <ul id="e1fb47d1-c700-43d9-af81-67335be09267" class="bulleted-list">
+          <li>
+            The TensorBoard server monitors the log directory and automatically
+            updates the visualizations with live data (with a short delay).
+          </li>
+        </ul>
+        <ul id="4db1ef4b-4521-4d68-8b39-8314c11757dd" class="bulleted-list">
+          <li>
+            To visualize data from multiple runs of program, point the server to
+            a root log directory and configure program to write do a different
+            subdirectory every time it runs.
+          </li>
+        </ul>
+        <ul id="9921eb2b-14aa-4427-95ce-535112767745" class="bulleted-list">
+          <li>
+            Keras provides a <code>TensorBoard()</code> callback that creates
+            the log directory and event files, and writes summaries to them.
+          </li>
+        </ul>
+        <ul id="c51843da-d83f-478b-9782-00fd1ed77f62" class="bulleted-list">
+          <li>
+            TensorFlow also offers a lower-level API in the
+            <code>tf.summary</code> package to log data that can be visualized
+            using TensorBoard.
+          </li>
+        </ul>
+        <figure id="0c3d6d69-9e1b-459c-9eda-f7811287cec1">
+          <a
+            href="https://colab.research.google.com/drive/1TrKq11PNwayewZ83gZpWV0ztyQFQBzeT?usp=sharing"
+            class="bookmark source"
+            ><div class="bookmark-info">
+              <div class="bookmark-text">
+                <div class="bookmark-title">Google Colaboratory</div>
+              </div>
+              <div class="bookmark-href">
+                <img
+                  src="https://colab.research.google.com/favicon.ico"
+                  class="icon bookmark-icon"
+                />https://colab.research.google.com/drive/1TrKq11PNwayewZ83gZpWV0ztyQFQBzeT?usp=sharing
+              </div>
+            </div>
+            <img
+              src="https://colab.research.google.com/img/colab_favicon_256px.png"
+              class="bookmark-image"
+          /></a>
+          <figcaption>
+            Use TensorBoard to visualize training and validation performance of
+            network on Fashion MNIST
+          </figcaption>
+        </figure>
+      </div>
+    </article>
+  </body>
+</html>
