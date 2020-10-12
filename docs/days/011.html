@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 11 - Fine-Tuning Neural Network Hyperparameters</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="dfacf1c3-d898-4d6b-bdd9-42edb2531773" class="page sans">
+      <header>
+        <h1 class="page-title">
+          Day 11 - Fine-Tuning Neural Network Hyperparameters
+        </h1>
+      </header>
+      <div class="page-body">
+        <ul id="7adc06dd-5151-4277-8568-a7b3cbd5ae3a" class="bulleted-list">
+          <li>
+            Examples of hyperparameters
+            <ul id="40af1c95-bbec-4f77-8ed8-7de829662804" class="bulleted-list">
+              <li>Number of hidden layers</li>
+            </ul>
+            <ul id="6b605d0a-63bc-49d5-a486-8ea61451bcb0" class="bulleted-list">
+              <li>Number of neurons per hidden layer</li>
+            </ul>
+            <ul id="d81d6db0-c41d-4175-b228-ba779ff7c048" class="bulleted-list">
+              <li>Learning rate</li>
+            </ul>
+            <ul id="c7af40fe-7362-4684-86f1-aacf06eb12f2" class="bulleted-list">
+              <li>Batch size</li>
+            </ul>
+            <ul id="c4dd57c4-33b4-46f1-b9ce-39297ff4a718" class="bulleted-list">
+              <li>Optimizer</li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="ef7249b9-151b-41a3-ad32-c7c8a375e9ab" class="bulleted-list">
+          <li>
+            Hyperparameter tuning can be done by
+            <ul id="52921b0c-77b8-4d4c-ab8c-eef191510aa9" class="bulleted-list">
+              <li>
+                Wrapping Keras model in object that mimics Scikit-Learn models
+                (using
+                <code>keras.wrappers.scikit_learn.KerasRegressor</code> and
+                <code>keras.wrappers.scikit_learn.KerasClassifier</code>) and
+                using grid search or randomized search from Scikit-Learn.
+              </li>
+            </ul>
+            <ul id="2ad323e5-12b3-4f48-928d-4bc364621415" class="bulleted-list">
+              <li>
+                Using specialized libraries for neural network hyperparameter
+                tuning like
+                <a href="https://github.com/hyperopt/hyperopt">Hyperopt</a>,
+                <a href="https://github.com/maxpumperla/hyperas">Hyperas</a>
+                (based on Hyperopt),
+                <a
+                  href="https://www.youtube.com/watch?v=Un0JDL3i5Hg&amp;t=24s&amp;ab_channel=TensorFlow"
+                  >Keras Tuner</a
+                >, etc.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <p id="2f3eac42-799e-4b6b-96dd-55cd3cd45a1d" class=""></p>
+        <h3 id="cad71ec9-bd8f-4fe4-a809-39236ffc393a" class="">
+          Tuning hyperparameters using Scikit-Learn
+        </h3>
+        <ul id="be93a1ac-f1e9-49d3-ad92-3b474598b986" class="bulleted-list">
+          <li>
+            Create a function that receives a set of hyperparameters, builds and
+            compiles a Keras model.
+          </li>
+        </ul>
+        <ul id="941892e4-f517-4b29-bc63-29827179ef90" class="bulleted-list">
+          <li>Set reasonable default values for the hyperparameters.</li>
+        </ul>
+        <ul id="877feb80-3422-42d0-98d2-c8a012cb7461" class="bulleted-list">
+          <li>
+            Pass the function to
+            <code>keras.wrappers.scikit_learn.KerasRegressor</code> or
+            <code>keras.wrappers.scikit_learn.KerasClassifier</code> to create a
+            model compatible with Scikit-Learn.
+          </li>
+        </ul>
+        <ul id="6173f405-a124-4454-afbd-3c46f58d9729" class="bulleted-list">
+          <li>
+            The wrapped model can be used like a regular Scikit-Learn model:
+            using <code>fit()</code>, <code>score()</code> and
+            <code>predict()</code>.
+          </li>
+        </ul>
+        <ul id="f679f705-9de7-4ea3-b0ac-4b85a7074fc3" class="bulleted-list">
+          <li>
+            Any extra parameters passed to the <code>fit()</code> method will be
+            passed to the underlying Keras model.
+          </li>
+        </ul>
+        <ul id="6732620a-2882-48fe-956c-61733ca553d9" class="bulleted-list">
+          <li>
+            The score will be the opposite of MSE because Scikit-Learn works
+            with scores, not losses (higher should be better).
+          </li>
+        </ul>
+        <figure id="f07533c2-20f7-4b1c-8317-b35e9fc6ef13">
+          <a
+            href="https://colab.research.google.com/drive/19vPJOXVEgdqiYeU9-vc_HFHJwByQ9G_t?usp=sharing"
+            class="bookmark source"
+            ><div class="bookmark-info">
+              <div class="bookmark-text">
+                <div class="bookmark-title">Google Colaboratory</div>
+              </div>
+              <div class="bookmark-href">
+                <img
+                  src="https://colab.research.google.com/favicon.ico"
+                  class="icon bookmark-icon"
+                />https://colab.research.google.com/drive/19vPJOXVEgdqiYeU9-vc_HFHJwByQ9G_t?usp=sharing
+              </div>
+            </div>
+            <img
+              src="https://colab.research.google.com/img/colab_favicon_256px.png"
+              class="bookmark-image"
+          /></a>
+          <figcaption>
+            Using RandomizedSearchCV from Scikit-Learn to tune hyperparameters
+            of network on California Housing dataset
+          </figcaption>
+        </figure>
+        <p id="d0801b68-601e-4f98-86c9-30137c8e2686" class=""></p>
+      </div>
+    </article>
+  </body>
+</html>
