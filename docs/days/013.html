@@ -1,0 +1,1706 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 13 - Glorot &amp; He Initialization</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="72d68868-86ff-44a8-9308-c747cf0a3839" class="page sans">
+      <header>
+        <h1 class="page-title">Day 13 - Glorot &amp; He Initialization</h1>
+      </header>
+      <div class="page-body">
+        <ul id="d9b22211-56c8-4ff1-bd82-c2f79261c9d4" class="bulleted-list">
+          <li>
+            To alleviate the problem of unstable gradients, the signal needs to
+            flow properly in both directions:
+            <ul id="77b24bdc-ac21-4b48-b109-a0b2e411ae0c" class="bulleted-list">
+              <li>in the forward direction when making predictions.</li>
+            </ul>
+            <ul id="e85a1f06-0532-4e07-9b16-4a2176712737" class="bulleted-list">
+              <li>in the reverse direction when backpropagating gradients.</li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="9ed9a9bd-f538-471a-a983-3ede630d6e1d" class="bulleted-list">
+          <li>
+            For the signal to flow properly:
+            <ul id="656ba25d-e085-400c-9b04-a126a4a1de00" class="bulleted-list">
+              <li>
+                Variance of inputs and outputs of each layer should be equal.
+              </li>
+            </ul>
+            <ul id="3e1733a4-0f05-440e-b89f-5b598a8f897f" class="bulleted-list">
+              <li>
+                Gradients should have equal variance before and after flowing
+                through each layer in the reverse direction.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="91ee7404-43ef-43b1-9aec-01da0f302386" class="bulleted-list">
+          <li>
+            It is not possible to guarantee both of the above, unless a layer
+            has an equal number of inputs (fan-in) and neurons (fan-out).
+          </li>
+        </ul>
+        <ul id="2c7a1918-a46b-4441-9c3b-eeedd0fec711" class="bulleted-list">
+          <li>
+            In practice, using the following strategies to initialize the
+            weights of each layer helps
+          </li>
+        </ul>
+        <div
+          id="0122af44-7276-4943-b09c-9266886b395d"
+          class="collection-content"
+        >
+          <h4 class="collection-title">Weight initialization strategies</h4>
+          <table class="collection-content">
+            <thead>
+              <tr>
+                <th>
+                  Activation function used
+                </th>
+                <th>
+                 Name
+                </th>
+                <th>
+                 Strategy
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="6f952cb9-1046-47d1-9f5d-c6181648b042">
+                <td class="cell-title">
+                  Logistic, Softmax, Tanh, No activation function (in case of regression)
+                </td>
+                <td class="cell-tyy@">Glorot</td>
+                <td class="cell-G&gt;d&lt;">
+                  A normal distribution with
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow
+                                ><mi>μ</mi><mo>=</mo><mn>0</mn
+                                ><mo separator="true">,</mo
+                                ><msup><mi>σ</mi><mn>2</mn></msup
+                                ><mo>=</mo
+                                ><mfrac
+                                  ><mn>1</mn
+                                  ><mrow
+                                    ><mi>f</mi><mi>a</mi
+                                    ><msub
+                                      ><mi>n</mi
+                                      ><mrow
+                                        ><mi>a</mi><mi>v</mi><mi>g</mi></mrow
+                                      ></msub
+                                    ></mrow
+                                  ></mfrac
+                                ></mrow
+                              ><annotation encoding="application/x-tex"
+                                >\mu = 0, \sigma^2 =
+                                \frac{1}{fan_{avg}}</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 0.625em;
+                                vertical-align: -0.19444em;
+                              "
+                            ></span
+                            ><span class="mord mathdefault">μ</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.008548em;
+                                vertical-align: -0.19444em;
+                              "
+                            ></span
+                            ><span class="mord">0</span
+                            ><span class="mpunct">,</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.16666666666666666em"
+                            ></span
+                            ><span class="mord"
+                              ><span
+                                class="mord mathdefault"
+                                style="margin-right: 0.03588em"
+                                >σ</span
+                              ><span class="msupsub"
+                                ><span class="vlist-t"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.8141079999999999em"
+                                      ><span
+                                        style="
+                                          top: -3.063em;
+                                          margin-right: 0.05em;
+                                        "
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 2.7em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            >2</span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ></span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.3874279999999999em;
+                                vertical-align: -0.5423199999999999em;
+                              "
+                            ></span
+                            ><span class="mord"
+                              ><span class="mopen nulldelimiter"></span
+                              ><span class="mfrac"
+                                ><span class="vlist-t vlist-t2"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.845108em"
+                                      ><span style="top: -2.655em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              style="margin-right: 0.10764em"
+                                              >f</span
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              >a</span
+                                            ><span class="mord mtight"
+                                              ><span
+                                                class="mord mathdefault mtight"
+                                                >n</span
+                                              ><span class="msupsub"
+                                                ><span class="vlist-t vlist-t2"
+                                                  ><span class="vlist-r"
+                                                    ><span
+                                                      class="vlist"
+                                                      style="
+                                                        height: 0.16454285714285716em;
+                                                      "
+                                                      ><span
+                                                        style="
+                                                          top: -2.357em;
+                                                          margin-left: 0em;
+                                                          margin-right: 0.07142857142857144em;
+                                                        "
+                                                        ><span
+                                                          class="pstrut"
+                                                          style="height: 2.5em"
+                                                        ></span
+                                                        ><span
+                                                          class="sizing reset-size3 size1 mtight"
+                                                          ><span
+                                                            class="mord mtight"
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              >a</span
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              style="
+                                                                margin-right: 0.03588em;
+                                                              "
+                                                              >v</span
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              style="
+                                                                margin-right: 0.03588em;
+                                                              "
+                                                              >g</span
+                                                            ></span
+                                                          ></span
+                                                        ></span
+                                                      ></span
+                                                    ><span class="vlist-s"
+                                                      >​</span
+                                                    ></span
+                                                  ><span class="vlist-r"
+                                                    ><span
+                                                      class="vlist"
+                                                      style="
+                                                        height: 0.2818857142857143em;
+                                                      "
+                                                      ><span></span></span></span></span></span></span></span></span></span
+                                      ><span style="top: -3.23em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="frac-line"
+                                          style="border-bottom-width: 0.04em"
+                                        ></span></span
+                                      ><span style="top: -3.394em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span class="mord mtight"
+                                              >1</span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ><span class="vlist-s">​</span></span
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.5423199999999999em"
+                                      ><span></span></span></span></span></span
+                              ><span
+                                class="mclose nulldelimiter"
+                              ></span></span></span></span></span></span
+                    ><span>﻿</span></span
+                  >
+                  <br><br>
+                  A uniform distribution between
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow><mo>−</mo><mi>r</mi></mrow
+                              ><annotation encoding="application/x-tex"
+                                >-r</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 0.66666em;
+                                vertical-align: -0.08333em;
+                              "
+                            ></span
+                            ><span class="mord">−</span
+                            ><span
+                              class="mord mathdefault"
+                              style="margin-right: 0.02778em"
+                              >r</span
+                            ></span
+                          ></span
+                        ></span
+                      ></span
+                    ><span>﻿</span></span
+                  >
+                  and
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow><mo>+</mo><mi>r</mi></mrow
+                              ><annotation encoding="application/x-tex"
+                                >+r</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 0.66666em;
+                                vertical-align: -0.08333em;
+                              "
+                            ></span
+                            ><span class="mord">+</span
+                            ><span
+                              class="mord mathdefault"
+                              style="margin-right: 0.02778em"
+                              >r</span
+                            ></span
+                          ></span
+                        ></span
+                      ></span
+                    ><span>﻿</span></span
+                  >, with
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow
+                                ><mi>r</mi><mo>=</mo
+                                ><msqrt
+                                  ><mfrac
+                                    ><mn>3</mn
+                                    ><mrow
+                                      ><mi>f</mi><mi>a</mi
+                                      ><msub
+                                        ><mi>n</mi
+                                        ><mrow
+                                          ><mi>a</mi><mi>v</mi><mi>g</mi></mrow
+                                        ></msub
+                                      ></mrow
+                                    ></mfrac
+                                  ></msqrt
+                                ></mrow
+                              ><annotation encoding="application/x-tex"
+                                >r = \sqrt{\frac{3}{fan_{avg}}}</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="height: 0.43056em; vertical-align: 0em"
+                            ></span
+                            ><span
+                              class="mord mathdefault"
+                              style="margin-right: 0.02778em"
+                              >r</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.84em;
+                                vertical-align: -0.703606em;
+                              "
+                            ></span
+                            ><span class="mord sqrt"
+                              ><span class="vlist-t vlist-t2"
+                                ><span class="vlist-r"
+                                  ><span
+                                    class="vlist"
+                                    style="height: 1.1363940000000001em"
+                                    ><span class="svg-align" style="top: -3.8em"
+                                      ><span
+                                        class="pstrut"
+                                        style="height: 3.8em"
+                                      ></span
+                                      ><span
+                                        class="mord"
+                                        style="padding-left: 1em"
+                                        ><span class="mord"
+                                          ><span
+                                            class="mopen nulldelimiter"
+                                          ></span
+                                          ><span class="mfrac"
+                                            ><span class="vlist-t vlist-t2"
+                                              ><span class="vlist-r"
+                                                ><span
+                                                  class="vlist"
+                                                  style="height: 0.845108em"
+                                                  ><span style="top: -2.655em"
+                                                    ><span
+                                                      class="pstrut"
+                                                      style="height: 3em"
+                                                    ></span
+                                                    ><span
+                                                      class="sizing reset-size6 size3 mtight"
+                                                      ><span class="mord mtight"
+                                                        ><span
+                                                          class="mord mathdefault mtight"
+                                                          style="
+                                                            margin-right: 0.10764em;
+                                                          "
+                                                          >f</span
+                                                        ><span
+                                                          class="mord mathdefault mtight"
+                                                          >a</span
+                                                        ><span
+                                                          class="mord mtight"
+                                                          ><span
+                                                            class="mord mathdefault mtight"
+                                                            >n</span
+                                                          ><span class="msupsub"
+                                                            ><span
+                                                              class="vlist-t vlist-t2"
+                                                              ><span
+                                                                class="vlist-r"
+                                                                ><span
+                                                                  class="vlist"
+                                                                  style="
+                                                                    height: 0.16454285714285716em;
+                                                                  "
+                                                                  ><span
+                                                                    style="
+                                                                      top: -2.357em;
+                                                                      margin-left: 0em;
+                                                                      margin-right: 0.07142857142857144em;
+                                                                    "
+                                                                    ><span
+                                                                      class="pstrut"
+                                                                      style="
+                                                                        height: 2.5em;
+                                                                      "
+                                                                    ></span
+                                                                    ><span
+                                                                      class="sizing reset-size3 size1 mtight"
+                                                                      ><span
+                                                                        class="mord mtight"
+                                                                        ><span
+                                                                          class="mord mathdefault mtight"
+                                                                          >a</span
+                                                                        ><span
+                                                                          class="mord mathdefault mtight"
+                                                                          style="
+                                                                            margin-right: 0.03588em;
+                                                                          "
+                                                                          >v</span
+                                                                        ><span
+                                                                          class="mord mathdefault mtight"
+                                                                          style="
+                                                                            margin-right: 0.03588em;
+                                                                          "
+                                                                          >g</span
+                                                                        ></span
+                                                                      ></span
+                                                                    ></span
+                                                                  ></span
+                                                                ><span
+                                                                  class="vlist-s"
+                                                                  >​</span
+                                                                ></span
+                                                              ><span
+                                                                class="vlist-r"
+                                                                ><span
+                                                                  class="vlist"
+                                                                  style="
+                                                                    height: 0.2818857142857143em;
+                                                                  "
+                                                                  ><span></span></span></span></span></span></span></span></span></span
+                                                  ><span style="top: -3.23em"
+                                                    ><span
+                                                      class="pstrut"
+                                                      style="height: 3em"
+                                                    ></span
+                                                    ><span
+                                                      class="frac-line"
+                                                      style="
+                                                        border-bottom-width: 0.04em;
+                                                      "
+                                                    ></span></span
+                                                  ><span style="top: -3.394em"
+                                                    ><span
+                                                      class="pstrut"
+                                                      style="height: 3em"
+                                                    ></span
+                                                    ><span
+                                                      class="sizing reset-size6 size3 mtight"
+                                                      ><span class="mord mtight"
+                                                        ><span
+                                                          class="mord mtight"
+                                                          >3</span
+                                                        ></span
+                                                      ></span
+                                                    ></span
+                                                  ></span
+                                                ><span class="vlist-s"
+                                                  >​</span
+                                                ></span
+                                              ><span class="vlist-r"
+                                                ><span
+                                                  class="vlist"
+                                                  style="
+                                                    height: 0.5423199999999999em;
+                                                  "
+                                                  ><span></span></span></span></span></span
+                                          ><span
+                                            class="mclose nulldelimiter"
+                                          ></span></span></span></span
+                                    ><span style="top: -3.096394em"
+                                      ><span
+                                        class="pstrut"
+                                        style="height: 3.8em"
+                                      ></span
+                                      ><span
+                                        class="hide-tail"
+                                        style="
+                                          min-width: 1.02em;
+                                          height: 1.8800000000000001em;
+                                        "
+                                        ><svg
+                                          width="400em"
+                                          height="1.8800000000000001em"
+                                          viewBox="0 0 400000 1944"
+                                          preserveAspectRatio="xMinYMin slice"
+                                        >
+                                          <path
+                                            d="M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z"
+                                          /></svg></span></span></span
+                                  ><span class="vlist-s">​</span></span
+                                ><span class="vlist-r"
+                                  ><span
+                                    class="vlist"
+                                    style="height: 0.703606em"
+                                    ><span></span></span></span></span></span></span></span></span></span
+                    ><span>﻿</span></span
+                  >
+                  <br><br>
+                  where
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow
+                                ><mi>f</mi><mi>a</mi
+                                ><msub
+                                  ><mi>n</mi
+                                  ><mrow
+                                    ><mi>a</mi><mi>v</mi><mi>g</mi></mrow
+                                  ></msub
+                                ><mo>=</mo
+                                ><mfrac
+                                  ><mrow
+                                    ><msub
+                                      ><mi>f</mi
+                                      ><mrow><mi>i</mi><mi>n</mi></mrow></msub
+                                    ><mo>+</mo
+                                    ><msub
+                                      ><mi>f</mi
+                                      ><mrow
+                                        ><mi>o</mi><mi>u</mi><mi>t</mi></mrow
+                                      ></msub
+                                    ></mrow
+                                  ><mn>2</mn></mfrac
+                                ></mrow
+                              ><annotation encoding="application/x-tex"
+                                >fan_{avg} = \frac{{f_{in} +
+                                f_{out}}}{2}</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 0.980548em;
+                                vertical-align: -0.286108em;
+                              "
+                            ></span
+                            ><span
+                              class="mord mathdefault"
+                              style="margin-right: 0.10764em"
+                              >f</span
+                            ><span class="mord mathdefault">a</span
+                            ><span class="mord"
+                              ><span class="mord mathdefault">n</span
+                              ><span class="msupsub"
+                                ><span class="vlist-t vlist-t2"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.15139200000000003em"
+                                      ><span
+                                        style="
+                                          top: -2.5500000000000003em;
+                                          margin-left: 0em;
+                                          margin-right: 0.05em;
+                                        "
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 2.7em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              >a</span
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              style="margin-right: 0.03588em"
+                                              >v</span
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              style="margin-right: 0.03588em"
+                                              >g</span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ><span class="vlist-s">​</span></span
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.286108em"
+                                      ><span></span></span></span></span></span></span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.277216em;
+                                vertical-align: -0.345em;
+                              "
+                            ></span
+                            ><span class="mord"
+                              ><span class="mopen nulldelimiter"></span
+                              ><span class="mfrac"
+                                ><span class="vlist-t vlist-t2"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.9322159999999999em"
+                                      ><span style="top: -2.6550000000000002em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span class="mord mtight"
+                                              >2</span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ><span style="top: -3.23em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="frac-line"
+                                          style="border-bottom-width: 0.04em"
+                                        ></span></span
+                                      ><span style="top: -3.446108em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span class="mord mtight"
+                                              ><span class="mord mtight"
+                                                ><span
+                                                  class="mord mathdefault mtight"
+                                                  style="
+                                                    margin-right: 0.10764em;
+                                                  "
+                                                  >f</span
+                                                ><span class="msupsub"
+                                                  ><span
+                                                    class="vlist-t vlist-t2"
+                                                    ><span class="vlist-r"
+                                                      ><span
+                                                        class="vlist"
+                                                        style="
+                                                          height: 0.3280857142857143em;
+                                                        "
+                                                        ><span
+                                                          style="
+                                                            top: -2.357em;
+                                                            margin-left: -0.10764em;
+                                                            margin-right: 0.07142857142857144em;
+                                                          "
+                                                          ><span
+                                                            class="pstrut"
+                                                            style="
+                                                              height: 2.5em;
+                                                            "
+                                                          ></span
+                                                          ><span
+                                                            class="sizing reset-size3 size1 mtight"
+                                                            ><span
+                                                              class="mord mtight"
+                                                              ><span
+                                                                class="mord mathdefault mtight"
+                                                                >i</span
+                                                              ><span
+                                                                class="mord mathdefault mtight"
+                                                                >n</span
+                                                              ></span
+                                                            ></span
+                                                          ></span
+                                                        ></span
+                                                      ><span class="vlist-s"
+                                                        >​</span
+                                                      ></span
+                                                    ><span class="vlist-r"
+                                                      ><span
+                                                        class="vlist"
+                                                        style="height: 0.143em"
+                                                        ><span></span></span></span></span></span></span
+                                              ><span class="mbin mtight">+</span
+                                              ><span class="mord mtight"
+                                                ><span
+                                                  class="mord mathdefault mtight"
+                                                  style="
+                                                    margin-right: 0.10764em;
+                                                  "
+                                                  >f</span
+                                                ><span class="msupsub"
+                                                  ><span
+                                                    class="vlist-t vlist-t2"
+                                                    ><span class="vlist-r"
+                                                      ><span
+                                                        class="vlist"
+                                                        style="
+                                                          height: 0.29634285714285713em;
+                                                        "
+                                                        ><span
+                                                          style="
+                                                            top: -2.357em;
+                                                            margin-left: -0.10764em;
+                                                            margin-right: 0.07142857142857144em;
+                                                          "
+                                                          ><span
+                                                            class="pstrut"
+                                                            style="
+                                                              height: 2.5em;
+                                                            "
+                                                          ></span
+                                                          ><span
+                                                            class="sizing reset-size3 size1 mtight"
+                                                            ><span
+                                                              class="mord mtight"
+                                                              ><span
+                                                                class="mord mathdefault mtight"
+                                                                >o</span
+                                                              ><span
+                                                                class="mord mathdefault mtight"
+                                                                >u</span
+                                                              ><span
+                                                                class="mord mathdefault mtight"
+                                                                >t</span
+                                                              ></span
+                                                            ></span
+                                                          ></span
+                                                        ></span
+                                                      ><span class="vlist-s"
+                                                        >​</span
+                                                      ></span
+                                                    ><span class="vlist-r"
+                                                      ><span
+                                                        class="vlist"
+                                                        style="height: 0.143em"
+                                                        ><span></span></span></span></span></span></span></span></span></span></span></span
+                                    ><span class="vlist-s">​</span></span
+                                  ><span class="vlist-r"
+                                    ><span class="vlist" style="height: 0.345em"
+                                      ><span></span></span></span></span></span
+                              ><span
+                                class="mclose nulldelimiter"
+                              ></span></span></span></span></span></span
+                    ><span>﻿</span></span
+                  >
+                </td>
+              </tr>
+              <tr id="cb1f0f1f-1146-4847-a24c-72af7019648f">
+                <td class="cell-title">ReLU and its variants
+                </td>
+                <td class="cell-tyy@">He</td>
+                <td class="cell-G&gt;d&lt;">
+                  A normal distribution with
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow
+                                ><mi>μ</mi><mo>=</mo><mn>0</mn
+                                ><mo separator="true">,</mo
+                                ><msup><mi>σ</mi><mn>2</mn></msup
+                                ><mo>=</mo
+                                ><mfrac
+                                  ><mn>2</mn
+                                  ><mrow
+                                    ><mi>f</mi><mi>a</mi
+                                    ><msub
+                                      ><mi>n</mi
+                                      ><mrow><mi>i</mi><mi>n</mi></mrow></msub
+                                    ></mrow
+                                  ></mfrac
+                                ></mrow
+                              ><annotation encoding="application/x-tex"
+                                >\mu = 0, \sigma^2 =
+                                \frac{2}{fan_{in}}</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 0.625em;
+                                vertical-align: -0.19444em;
+                              "
+                            ></span
+                            ><span class="mord mathdefault">μ</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.008548em;
+                                vertical-align: -0.19444em;
+                              "
+                            ></span
+                            ><span class="mord">0</span
+                            ><span class="mpunct">,</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.16666666666666666em"
+                            ></span
+                            ><span class="mord"
+                              ><span
+                                class="mord mathdefault"
+                                style="margin-right: 0.03588em"
+                                >σ</span
+                              ><span class="msupsub"
+                                ><span class="vlist-t"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.8141079999999999em"
+                                      ><span
+                                        style="
+                                          top: -3.063em;
+                                          margin-right: 0.05em;
+                                        "
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 2.7em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            >2</span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ></span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.326216em;
+                                vertical-align: -0.481108em;
+                              "
+                            ></span
+                            ><span class="mord"
+                              ><span class="mopen nulldelimiter"></span
+                              ><span class="mfrac"
+                                ><span class="vlist-t vlist-t2"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.845108em"
+                                      ><span style="top: -2.6550000000000002em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              style="margin-right: 0.10764em"
+                                              >f</span
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              >a</span
+                                            ><span class="mord mtight"
+                                              ><span
+                                                class="mord mathdefault mtight"
+                                                >n</span
+                                              ><span class="msupsub"
+                                                ><span class="vlist-t vlist-t2"
+                                                  ><span class="vlist-r"
+                                                    ><span
+                                                      class="vlist"
+                                                      style="
+                                                        height: 0.3280857142857143em;
+                                                      "
+                                                      ><span
+                                                        style="
+                                                          top: -2.357em;
+                                                          margin-left: 0em;
+                                                          margin-right: 0.07142857142857144em;
+                                                        "
+                                                        ><span
+                                                          class="pstrut"
+                                                          style="height: 2.5em"
+                                                        ></span
+                                                        ><span
+                                                          class="sizing reset-size3 size1 mtight"
+                                                          ><span
+                                                            class="mord mtight"
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              >i</span
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              >n</span
+                                                            ></span
+                                                          ></span
+                                                        ></span
+                                                      ></span
+                                                    ><span class="vlist-s"
+                                                      >​</span
+                                                    ></span
+                                                  ><span class="vlist-r"
+                                                    ><span
+                                                      class="vlist"
+                                                      style="height: 0.143em"
+                                                      ><span></span></span></span></span></span></span></span></span></span
+                                      ><span style="top: -3.23em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="frac-line"
+                                          style="border-bottom-width: 0.04em"
+                                        ></span></span
+                                      ><span style="top: -3.394em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span class="mord mtight"
+                                              >2</span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ><span class="vlist-s">​</span></span
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.481108em"
+                                      ><span></span></span></span></span></span
+                              ><span
+                                class="mclose nulldelimiter"
+                              ></span></span></span></span></span></span
+                    ><span>﻿</span></span
+                  >
+                </td>
+              </tr>
+              <tr id="1fd20f0b-5c9e-4980-918b-711762e4d0aa">
+                <td class="cell-title">SELU</td>
+                <td class="cell-tyy@">LeCun</td>
+                <td class="cell-G&gt;d&lt;">
+                  A normal distribution with
+                  <style>
+                    @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                  ><span
+                    data-token-index="0"
+                    contenteditable="false"
+                    class="notion-text-equation-token"
+                    style="
+                      user-select: all;
+                      -webkit-user-select: all;
+                      -moz-user-select: all;
+                    "
+                    ><span></span
+                    ><span
+                      ><span class="katex"
+                        ><span class="katex-mathml"
+                          ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                            ><semantics
+                              ><mrow
+                                ><mi>μ</mi><mo>=</mo><mn>0</mn
+                                ><mo separator="true">,</mo
+                                ><msup><mi>σ</mi><mn>2</mn></msup
+                                ><mo>=</mo
+                                ><mfrac
+                                  ><mn>1</mn
+                                  ><mrow
+                                    ><mi>f</mi><mi>a</mi
+                                    ><msub
+                                      ><mi>n</mi
+                                      ><mrow><mi>i</mi><mi>n</mi></mrow></msub
+                                    ></mrow
+                                  ></mfrac
+                                ></mrow
+                              ><annotation encoding="application/x-tex"
+                                >\mu = 0, \sigma^2 =
+                                \frac{1}{fan_{in}}</annotation
+                              ></semantics
+                            ></math
+                          ></span
+                        ><span class="katex-html" aria-hidden="true"
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 0.625em;
+                                vertical-align: -0.19444em;
+                              "
+                            ></span
+                            ><span class="mord mathdefault">μ</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.008548em;
+                                vertical-align: -0.19444em;
+                              "
+                            ></span
+                            ><span class="mord">0</span
+                            ><span class="mpunct">,</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.16666666666666666em"
+                            ></span
+                            ><span class="mord"
+                              ><span
+                                class="mord mathdefault"
+                                style="margin-right: 0.03588em"
+                                >σ</span
+                              ><span class="msupsub"
+                                ><span class="vlist-t"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.8141079999999999em"
+                                      ><span
+                                        style="
+                                          top: -3.063em;
+                                          margin-right: 0.05em;
+                                        "
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 2.7em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            >2</span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ></span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span
+                            ><span class="mrel">=</span
+                            ><span
+                              class="mspace"
+                              style="margin-right: 0.2777777777777778em"
+                            ></span></span
+                          ><span class="base"
+                            ><span
+                              class="strut"
+                              style="
+                                height: 1.326216em;
+                                vertical-align: -0.481108em;
+                              "
+                            ></span
+                            ><span class="mord"
+                              ><span class="mopen nulldelimiter"></span
+                              ><span class="mfrac"
+                                ><span class="vlist-t vlist-t2"
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.845108em"
+                                      ><span style="top: -2.6550000000000002em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              style="margin-right: 0.10764em"
+                                              >f</span
+                                            ><span
+                                              class="mord mathdefault mtight"
+                                              >a</span
+                                            ><span class="mord mtight"
+                                              ><span
+                                                class="mord mathdefault mtight"
+                                                >n</span
+                                              ><span class="msupsub"
+                                                ><span class="vlist-t vlist-t2"
+                                                  ><span class="vlist-r"
+                                                    ><span
+                                                      class="vlist"
+                                                      style="
+                                                        height: 0.3280857142857143em;
+                                                      "
+                                                      ><span
+                                                        style="
+                                                          top: -2.357em;
+                                                          margin-left: 0em;
+                                                          margin-right: 0.07142857142857144em;
+                                                        "
+                                                        ><span
+                                                          class="pstrut"
+                                                          style="height: 2.5em"
+                                                        ></span
+                                                        ><span
+                                                          class="sizing reset-size3 size1 mtight"
+                                                          ><span
+                                                            class="mord mtight"
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              >i</span
+                                                            ><span
+                                                              class="mord mathdefault mtight"
+                                                              >n</span
+                                                            ></span
+                                                          ></span
+                                                        ></span
+                                                      ></span
+                                                    ><span class="vlist-s"
+                                                      >​</span
+                                                    ></span
+                                                  ><span class="vlist-r"
+                                                    ><span
+                                                      class="vlist"
+                                                      style="height: 0.143em"
+                                                      ><span></span></span></span></span></span></span></span></span></span
+                                      ><span style="top: -3.23em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="frac-line"
+                                          style="border-bottom-width: 0.04em"
+                                        ></span></span
+                                      ><span style="top: -3.394em"
+                                        ><span
+                                          class="pstrut"
+                                          style="height: 3em"
+                                        ></span
+                                        ><span
+                                          class="sizing reset-size6 size3 mtight"
+                                          ><span class="mord mtight"
+                                            ><span class="mord mtight"
+                                              >1</span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ><span class="vlist-s">​</span></span
+                                  ><span class="vlist-r"
+                                    ><span
+                                      class="vlist"
+                                      style="height: 0.481108em"
+                                      ><span></span></span></span></span></span
+                              ><span
+                                class="mclose nulldelimiter"
+                              ></span></span></span></span></span></span
+                    ><span>﻿</span></span
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul id="90ac3986-3cd9-45b1-9a95-998bbfe19f14" class="bulleted-list">
+          <li>
+            In all cases above, to use uniform distribution, calculate
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mi>r</mi><mo>=</mo
+                          ><msqrt
+                            ><mrow
+                              ><mn>3</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow
+                            ></msqrt
+                          ></mrow
+                        ><annotation encoding="application/x-tex"
+                          >r = \sqrt{3 \sigma^2}</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.02778em"
+                        >r</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="
+                          height: 1.04em;
+                          vertical-align: -0.08494599999999997em;
+                        "
+                      ></span
+                      ><span class="mord sqrt"
+                        ><span class="vlist-t vlist-t2"
+                          ><span class="vlist-r"
+                            ><span
+                              class="vlist"
+                              style="height: 0.9550540000000001em"
+                              ><span class="svg-align" style="top: -3em"
+                                ><span class="pstrut" style="height: 3em"></span
+                                ><span
+                                  class="mord"
+                                  style="padding-left: 0.833em"
+                                  ><span class="mord">3</span
+                                  ><span class="mord"
+                                    ><span
+                                      class="mord mathdefault"
+                                      style="margin-right: 0.03588em"
+                                      >σ</span
+                                    ><span class="msupsub"
+                                      ><span class="vlist-t"
+                                        ><span class="vlist-r"
+                                          ><span
+                                            class="vlist"
+                                            style="height: 0.740108em"
+                                            ><span
+                                              style="
+                                                top: -2.9890000000000003em;
+                                                margin-right: 0.05em;
+                                              "
+                                              ><span
+                                                class="pstrut"
+                                                style="height: 2.7em"
+                                              ></span
+                                              ><span
+                                                class="sizing reset-size6 size3 mtight"
+                                                ><span class="mord mtight"
+                                                  >2</span
+                                                ></span
+                                              ></span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ><span style="top: -2.915054em"
+                                ><span class="pstrut" style="height: 3em"></span
+                                ><span
+                                  class="hide-tail"
+                                  style="min-width: 0.853em; height: 1.08em"
+                                  ><svg
+                                    width="400em"
+                                    height="1.08em"
+                                    viewBox="0 0 400000 1080"
+                                    preserveAspectRatio="xMinYMin slice"
+                                  >
+                                    <path
+                                      d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"
+                                    /></svg></span></span></span
+                            ><span class="vlist-s">​</span></span
+                          ><span class="vlist-r"
+                            ><span
+                              class="vlist"
+                              style="height: 0.08494599999999997em"
+                              ><span></span></span></span></span></span></span></span></span></span
+              ><span>﻿</span></span
+            >.
+          </li>
+        </ul>
+        <ul id="63c9f7eb-cdac-4ab0-894a-293b27323a6f" class="bulleted-list">
+          <li>
+            Keras uses
+            <strong>Glorot initialization with uniform distribution</strong> by
+            default.
+          </li>
+        </ul>
+        <ul id="be3d3e0f-1151-4226-9a65-dea5998991bb" class="bulleted-list">
+          <li>
+            To use <strong>He initialization with normal distribution</strong>:
+            <br>
+            <code
+              >keras.layers.Dense(30, activation=&quot;relu&quot;,
+              kernel_initializer=&quot;he_normal&quot;)</code
+            >
+          </li>
+        </ul>
+        <ul id="283225fd-4caa-4ed3-9b59-25bdfe44af96" class="bulleted-list">
+          <li>
+            To use
+            <strong>He initialization with uniform distribution</strong> based
+            on
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mi>f</mi><mi>a</mi
+                          ><msub
+                            ><mi>n</mi
+                            ><mrow><mi>a</mi><mi>v</mi><mi>g</mi></mrow></msub
+                          ></mrow
+                        ><annotation encoding="application/x-tex"
+                          >fan_{avg}</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.980548em; vertical-align: -0.286108em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.10764em"
+                        >f</span
+                      ><span class="mord mathdefault">a</span
+                      ><span class="mord"
+                        ><span class="mord mathdefault">n</span
+                        ><span class="msupsub"
+                          ><span class="vlist-t vlist-t2"
+                            ><span class="vlist-r"
+                              ><span
+                                class="vlist"
+                                style="height: 0.15139200000000003em"
+                                ><span
+                                  style="
+                                    top: -2.5500000000000003em;
+                                    margin-left: 0em;
+                                    margin-right: 0.05em;
+                                  "
+                                  ><span
+                                    class="pstrut"
+                                    style="height: 2.7em"
+                                  ></span
+                                  ><span class="sizing reset-size6 size3 mtight"
+                                    ><span class="mord mtight"
+                                      ><span class="mord mathdefault mtight"
+                                        >a</span
+                                      ><span
+                                        class="mord mathdefault mtight"
+                                        style="margin-right: 0.03588em"
+                                        >v</span
+                                      ><span
+                                        class="mord mathdefault mtight"
+                                        style="margin-right: 0.03588em"
+                                        >g</span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ><span class="vlist-s">​</span></span
+                            ><span class="vlist-r"
+                              ><span class="vlist" style="height: 0.286108em"
+                                ><span></span></span></span></span></span></span></span></span></span></span
+              ><span>﻿</span></span
+            >
+            instead of
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mi>f</mi><mi>a</mi
+                          ><msub
+                            ><mi>n</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub
+                          ></mrow
+                        ><annotation encoding="application/x-tex"
+                          >fan_{in}</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="
+                          height: 0.8888799999999999em;
+                          vertical-align: -0.19444em;
+                        "
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.10764em"
+                        >f</span
+                      ><span class="mord mathdefault">a</span
+                      ><span class="mord"
+                        ><span class="mord mathdefault">n</span
+                        ><span class="msupsub"
+                          ><span class="vlist-t vlist-t2"
+                            ><span class="vlist-r"
+                              ><span
+                                class="vlist"
+                                style="height: 0.31166399999999994em"
+                                ><span
+                                  style="
+                                    top: -2.5500000000000003em;
+                                    margin-left: 0em;
+                                    margin-right: 0.05em;
+                                  "
+                                  ><span
+                                    class="pstrut"
+                                    style="height: 2.7em"
+                                  ></span
+                                  ><span class="sizing reset-size6 size3 mtight"
+                                    ><span class="mord mtight"
+                                      ><span class="mord mathdefault mtight"
+                                        >i</span
+                                      ><span class="mord mathdefault mtight"
+                                        >n</span
+                                      ></span
+                                    ></span
+                                  ></span
+                                ></span
+                              ><span class="vlist-s">​</span></span
+                            ><span class="vlist-r"
+                              ><span class="vlist" style="height: 0.15em"
+                                ><span></span></span></span></span></span></span></span></span></span></span
+              ><span>﻿</span></span
+            >:
+            <br>
+            <code
+              >he_avg_init = keras.initializers.VarianceScaling(scale=2.,
+              mode=&quot;fan_avg&quot;, distribution=&quot;uniform&quot;)</code
+            >
+            <code>keras.layers.Dense(... kernel_initializer=he_avg_init)</code>
+          </li>
+        </ul>
+        <p id="76b90a86-83ff-4895-beae-664fc29d05aa" class=""></p>
+      </div>
+    </article>
+  </body>
+</html>
