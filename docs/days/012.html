@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 12 - Vanishing and Exploding Gradients</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="5f02ec8c-4644-4624-bd07-1227034d7c00" class="page sans">
+      <header>
+        <h1 class="page-title">Day 12 - Vanishing and Exploding Gradients</h1>
+      </header>
+      <div class="page-body">
+        <ul id="2ceeb12a-29b4-470b-913a-c7c636a4f275" class="bulleted-list">
+          <li>
+            Deep neural network suffer from
+            <strong>unstable gradients</strong> - different layers learn at
+            widely different speeds due to
+            <strong>vanishing gradients</strong> or
+            <strong>exploding gradients</strong>.
+          </li>
+        </ul>
+        <h2 id="cd886de9-066b-4975-b4ad-517bb614adce" class="">
+          The Vanishing Gradients Problem
+        </h2>
+        <ul id="e2a55bd6-070c-4ace-abf6-47b037724ed3" class="bulleted-list">
+          <li>
+            In feedforward deep networks, the gradients keep getting smaller as
+            the algorithm progresses to lower layers.
+          </li>
+        </ul>
+        <ul id="e62249cc-e81a-4554-b499-91aae8dc9606" class="bulleted-list">
+          <li>
+            As a result, the connection weights of lower layers are left
+            virtually unchanged and training never converges to a good solution.
+          </li>
+        </ul>
+        <ul id="bc5ed915-8897-450f-bc11-4365bb624b7d" class="bulleted-list">
+          <li>
+            Glorot &amp; Benjio [1] showed that using the sigmoid activation
+            function and a normal distribution (with mean = 0, standard
+            deviation = 1) to initialize the weights results in greater variance
+            in the output of each layer compared to the input.
+          </li>
+        </ul>
+        <ul id="3372c646-fcdc-42a3-95ca-dd2d0d98258b" class="bulleted-list">
+          <li>
+            The variance keeps increasing through the layers until the
+            activation function saturates in the top layer.
+          </li>
+        </ul>
+        <ul id="9fe3000f-c181-4482-9432-1afabee4ab1a" class="bulleted-list">
+          <li>
+            With the sigmoid function, saturation occurs at 0 (on the lower end)
+            and 1 (on the upper end), and the derviative is very close to zero.
+            As a result, a small gradient propagates through the network and it
+            keeps getting diluted.
+          </li>
+        </ul>
+        <ul id="c38dea52-a51f-4208-87dc-b32b00cad193" class="bulleted-list">
+          <li>
+            The sigmoid function having a mean of 0.5 makes it worse. The
+            hyperbolic tangent function that has a mean of 0 performs slightly
+            better.
+          </li>
+        </ul>
+        <h2 id="2a4bddd1-2d61-49bc-bf51-bed915818145" class="">
+          The Exploding Gradients Problem
+        </h2>
+        <ul id="3aa0385d-8343-4377-aa51-88d11670d421" class="bulleted-list">
+          <li>
+            In recurrent neural networks, the gradients keep growing bigger.
+          </li>
+        </ul>
+        <ul id="3325ccf0-c912-4734-8081-d397331d25cd" class="bulleted-list">
+          <li>
+            As a result, layers get a very large update and the algorithm
+            actually ends up diverging.
+          </li>
+        </ul>
+        <h2 id="3f57f12e-9322-49f8-8aac-ed866627dd8f" class="">
+          Methods to Deal With Unstable Gradients
+        </h2>
+        <ul id="8add6865-42c0-48b9-a6d5-b196e4d57b95" class="bulleted-list">
+          <li>Glorot &amp; He initialization</li>
+        </ul>
+        <ul id="b018e65c-b302-4faa-a208-d78ad13d3ad9" class="bulleted-list">
+          <li>Use non-saturating activation functions</li>
+        </ul>
+        <ul id="845fe975-c1f6-4c28-9cad-81f741ca7303" class="bulleted-list">
+          <li>Batch normalization</li>
+        </ul>
+        <ul id="1ede8dcc-b2a0-4df0-9cc5-99e1b92725bc" class="bulleted-list">
+          <li>Gradient clipping</li>
+        </ul>
+        <p id="64b8783b-32e0-4a3b-9216-1188aea2e422" class=""></p>
+        <h2 id="33dde1f2-9a1d-4ad6-b2c5-9d291e94a5f0" class="">References</h2>
+        <p id="cf77530a-17d2-4947-8da7-90a5e431696f" class="">
+          [1] Glorot, Xavier &amp; Bengio, Y.. (2010). Understanding the
+          difficulty of training deep feedforward neural networks. Journal of
+          Machine Learning Research - Proceedings Track. 9. 249-256.
+        </p>
+        <p id="b22d922e-38d5-4ce1-8863-e02e06ad85e4" class=""></p>
+      </div>
+    </article>
+  </body>
+</html>
