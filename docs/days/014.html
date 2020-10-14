@@ -1,0 +1,1504 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Day 14 - Nonsaturating Activation Functions</title>
+		<link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <article id="c54f5bfe-f517-42c4-8a6c-a1c0e19ca9d5" class="page sans">
+      <header>
+        <h1 class="page-title">Day 14 - Nonsaturating Activation Functions</h1>
+      </header>
+      <div class="page-body">
+        <ul id="20ae882e-2b4a-4471-8bbe-bae5219b5f77" class="bulleted-list">
+          <li>
+            One of the reasons for unstable gradients is a poor choice of
+            activation function. There are other activation functions that
+            perform much better than the Sigmoid.
+          </li>
+        </ul>
+        <hr id="daf2b4b8-fef8-481c-a372-7345533de72e" />
+        <h2 id="d85bc21c-9f1b-4502-81bf-4f7563cc26cb" class="">
+          Rectified Linear Unit (ReLU)
+        </h2>
+        <ul id="55216a2e-d593-446b-b48d-fd32c6a3db29" class="bulleted-list">
+          <li>
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mtext>ReLU</mtext><mo stretchy="false">(</mo
+                          ><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo
+                          ><mi>max</mi><mo>⁡</mo><mo stretchy="false">(</mo
+                          ><mn>0</mn><mo separator="true">,</mo><mi>z</mi
+                          ><mo stretchy="false">)</mo></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\text{ReLU}(z) = \max(0, z)</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mord text"
+                        ><span class="mord">ReLU</span></span
+                      ><span class="mopen">(</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mop">max</span><span class="mopen">(</span
+                      ><span class="mord">0</span><span class="mpunct">,</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.16666666666666666em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+          </li>
+        </ul>
+
+        <ul id="1ea41d24-fb65-44e5-b19d-1222c4d3f286" class="bulleted-list">
+          <li>
+            Advantages: <strong>fast</strong> to compute,
+            <strong>does not saturate</strong> for positive values.
+          </li>
+        </ul>
+        <ul id="127b7367-b802-4e66-abaf-bcd0196ea258" class="bulleted-list">
+          <li>Disadvantages: suffers from <strong>dying ReLUs</strong>.</li>
+        </ul>
+        <h3 id="39995c8a-97f4-4a7d-8236-bab08aeb77e4" class="">Dying ReLUs</h3>
+        <ul id="8a8e3b1c-52d3-4484-8167-6911fcb53d92" class="bulleted-list">
+          <li>ReLUs that output 0 always.</li>
+        </ul>
+        <ul id="9fcfed8c-2a71-435a-853a-a0a0c30838a2" class="bulleted-list">
+          <li>Can happen with a large learning rate.</li>
+        </ul>
+        <ul id="aeaebfd1-60cc-4e14-936c-031c216cd477" class="bulleted-list">
+          <li>
+            Occurs when weights are tweaked so that weighted sum of iniputs is
+            negative for all instances in training set. As a result, gradient is
+            zero and gradient descent has no effect.
+          </li>
+        </ul>
+        <h3 id="4ad55b32-7cb0-4928-9e0f-07b7f2eca367" class="">
+          Using ReLU in Keras
+        </h3>
+        <pre
+          id="aaac1a46-6d2d-425f-a458-51030ed8dd29"
+          class="code"
+        ><code>keras.layers.Dense(50, activation=&quot;relu&quot;, kernel_initializer=&quot;he_normal&quot;)</code></pre>
+        <hr id="2b71fac6-c41b-4d91-bc38-45803376ed56" />
+        <h2 id="96d13129-aada-4305-9a61-b8a00b62fd73" class="">Leaky ReLU</h2>
+        <ul id="848ba02b-8ad3-4332-865e-fcf8d09fdab3" class="bulleted-list">
+          <li>
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mtext>LeakyReLU</mtext><mo stretchy="false">(</mo
+                          ><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo
+                          ><mi>max</mi><mo>⁡</mo><mo stretchy="false">(</mo
+                          ><mi>α</mi><mi>z</mi><mo separator="true">,</mo
+                          ><mi>z</mi><mo stretchy="false">)</mo></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\text{LeakyReLU}(z) = \max(\alpha z, z)</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mord text"
+                        ><span class="mord">LeakyReLU</span></span
+                      ><span class="mopen">(</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 1em; vertical-align: -0.25em"
+                      ></span
+                      ><span class="mop">max</span><span class="mopen">(</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mpunct">,</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.16666666666666666em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span class="mclose">)</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+          </li>
+        </ul>
+        <ul id="b1b80154-7385-4135-aa85-7ae70196eb02" class="bulleted-list">
+          <li>
+            There is a small slope when
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>z</mi><mo>&lt;</mo><mn>0</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >z &lt; 0</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.5782em; vertical-align: -0.0391em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">&lt;</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">0</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            so neurons never die. Training can slow down if sum of inputs is
+            less than 0, but it never completely stops.
+          </li>
+        </ul>
+        <ul id="8bd79bb6-cc49-4228-8c8e-772ca7445948" class="bulleted-list">
+          <li>
+            In practice, a higher value of
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            results in better performance. Keras uses default value of
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi><mo>=</mo><mn>0.3</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha = 0.3</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">0</span><span class="mord">.</span
+                      ><span class="mord">3</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >.
+          </li>
+        </ul>
+        <h3 id="b05d2d6e-9811-4df9-a30f-df1385b9fb3a" class="">
+          Using Leaky ReLU in Keras
+        </h3>
+        <pre id="2566f9af-3f6b-41c2-976b-79d7c73cd81d" class="code"><code>...
+keras.layers.Dense(10, kernel_initializer=&quot;he_normal&quot;),
+keras.layers.LeakyReLU(alpha=0.2),
+...</code></pre>
+        <hr id="f029c9cb-eee7-477f-bab6-34e94d44bbe3" />
+        <h2 id="11dfd11b-015c-4982-9a53-851ce210370c" class="">
+          Randomized Leaky ReLU (RReLU)
+        </h2>
+        <ul id="479e7caa-12ec-4788-aa61-253c728ad280" class="bulleted-list">
+          <li>
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            is picked randomly from a given range during training, and fixed to
+            an average value during testing.
+          </li>
+        </ul>
+        <ul id="332107fb-428b-4e47-afdd-cd72917b6f55" class="bulleted-list">
+          <li>
+            RReLU seems too act like a regularizer, reducing risk of overfitting
+            on the training set.
+          </li>
+        </ul>
+        <h3 id="bf1649fa-fc0f-400d-a01b-0c474e1744bb" class="">
+          Using Leaky ReLU in Keras
+        </h3>
+        <ul id="d617fa54-2990-4d96-8b22-457e9b75c81d" class="bulleted-list">
+          <li>There is no official implementation in Keras for Leaky ReLU.</li>
+        </ul>
+        <ul id="99cbf679-9376-4afe-b4f1-4ac425a2cabf" class="bulleted-list">
+          <li>A custom layer can be created to implement it.</li>
+        </ul>
+        <hr id="50392a34-6e0b-4d40-a824-208016a16ea7" />
+        <h2 id="faa5fb7c-0eaa-4c71-94bc-eb9c9eb54477" class="">
+          Parameterized Leaky ReLU (PReLU)
+        </h2>
+        <ul id="52d8396b-39dd-4669-8bb3-86c6ffcc0325" class="bulleted-list">
+          <li>
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            is learned via backpropagation during training instead of being a
+            hyperparameter.
+          </li>
+        </ul>
+        <ul id="01291a5c-d261-4d2e-aa81-c530f0402ea0" class="bulleted-list">
+          <li>Outperforms ReLU on large image datasets.</li>
+        </ul>
+        <ul id="581b44f4-2871-4618-bb49-9f93c10c8234" class="bulleted-list">
+          <li>Runs risk of overfitting on smaller datasets.</li>
+        </ul>
+        <h3 id="24b5952a-dfae-423e-a05e-505cabbe8c23" class="">
+          Using PReLU in Keras
+        </h3>
+        <pre id="902af713-18c2-457f-8f2b-ba336e4afb64" class="code"><code>...
+keras.layers.Dense(10, kernel_initializer=&quot;he_normal&quot;),
+keras.layers.PReLU(),
+...</code></pre>
+        <hr id="50cb1cee-c02c-4d69-a578-38bac053d164" />
+        <h2 id="358479af-f8f2-44c7-8f18-5090cabf2f53" class="">
+          Exponential Linear Unit (ELU)
+        </h2>
+        <p id="906a43e9-1020-45cf-9106-c0735d49b51f" class=""></p>
+        <p id="7963ae36-fbc9-4a15-94ca-8d6c1fd05c14" class="">
+          <style>
+            @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+          ><span
+            data-token-index="0"
+            contenteditable="false"
+            class="notion-text-equation-token"
+            style="
+              user-select: all;
+              -webkit-user-select: all;
+              -moz-user-select: all;
+            "
+            ><span></span
+            ><span
+              ><span class="katex"
+                ><span class="katex-mathml"
+                  ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                    ><semantics
+                      ><mrow
+                        ><msub><mtext>ELU</mtext><mi>α</mi></msub
+                        ><mo stretchy="false">(</mo><mi>z</mi
+                        ><mo stretchy="false">)</mo><mo>=</mo
+                        ><mrow
+                          ><mo fence="true">{</mo
+                          ><mtable
+                            rowspacing="0.3599999999999999em"
+                            columnalign="left left"
+                            columnspacing="1em"
+                            ><mtr
+                              ><mtd
+                                ><mstyle scriptlevel="0" displaystyle="false"
+                                  ><mrow
+                                    ><mi>α</mi><mo stretchy="false">(</mo
+                                    ><msup><mi>e</mi><mi>z</mi></msup
+                                    ><mo>−</mo><mn>1</mn
+                                    ><mo stretchy="false">)</mo
+                                    ><mo separator="true">,</mo></mrow
+                                  ></mstyle
+                                ></mtd
+                              ><mtd
+                                ><mstyle scriptlevel="0" displaystyle="false"
+                                  ><mrow
+                                    ><mtext>if </mtext><mi>z</mi><mo>&lt;</mo
+                                    ><mn>0</mn><mo separator="true">,</mo></mrow
+                                  ></mstyle
+                                ></mtd
+                              ></mtr
+                            ><mtr
+                              ><mtd
+                                ><mstyle scriptlevel="0" displaystyle="false"
+                                  ><mrow
+                                    ><mi>z</mi><mo separator="true">,</mo></mrow
+                                  ></mstyle
+                                ></mtd
+                              ><mtd
+                                ><mstyle scriptlevel="0" displaystyle="false"
+                                  ><mrow
+                                    ><mtext>if </mtext><mi>z</mi><mo>&gt;</mo
+                                    ><mo>=</mo><mn>0.</mn></mrow
+                                  ></mstyle
+                                ></mtd
+                              ></mtr
+                            ></mtable
+                          ></mrow
+                        ></mrow
+                      ><annotation encoding="application/x-tex"
+                        >\text{ELU}_{\alpha}(z) = \begin{cases} \alpha(e^z-1),
+                        &amp; \text{if } z&lt;0,\\ z, &amp; \text{if } z &gt;=
+                        0. \end{cases}</annotation
+                      ></semantics
+                    ></math
+                  ></span
+                ><span class="katex-html" aria-hidden="true"
+                  ><span class="base"
+                    ><span
+                      class="strut"
+                      style="height: 1em; vertical-align: -0.25em"
+                    ></span
+                    ><span class="mord"
+                      ><span class="mord text"
+                        ><span class="mord">ELU</span></span
+                      ><span class="msupsub"
+                        ><span class="vlist-t vlist-t2"
+                          ><span class="vlist-r"
+                            ><span class="vlist" style="height: 0.151392em"
+                              ><span
+                                style="
+                                  top: -2.5500000000000003em;
+                                  margin-right: 0.05em;
+                                "
+                                ><span
+                                  class="pstrut"
+                                  style="height: 2.7em"
+                                ></span
+                                ><span class="sizing reset-size6 size3 mtight"
+                                  ><span class="mord mtight"
+                                    ><span
+                                      class="mord mathdefault mtight"
+                                      style="margin-right: 0.0037em"
+                                      >α</span
+                                    ></span
+                                  ></span
+                                ></span
+                              ></span
+                            ><span class="vlist-s">​</span></span
+                          ><span class="vlist-r"
+                            ><span class="vlist" style="height: 0.15em"
+                              ><span></span></span></span></span></span></span
+                    ><span class="mopen">(</span
+                    ><span
+                      class="mord mathdefault"
+                      style="margin-right: 0.04398em"
+                      >z</span
+                    ><span class="mclose">)</span
+                    ><span
+                      class="mspace"
+                      style="margin-right: 0.2777777777777778em"
+                    ></span
+                    ><span class="mrel">=</span
+                    ><span
+                      class="mspace"
+                      style="margin-right: 0.2777777777777778em"
+                    ></span></span
+                  ><span class="base"
+                    ><span
+                      class="strut"
+                      style="
+                        height: 3.0000299999999998em;
+                        vertical-align: -1.25003em;
+                      "
+                    ></span
+                    ><span class="minner"
+                      ><span class="mopen delimcenter" style="top: 0em"
+                        ><span class="delimsizing size4">{</span></span
+                      ><span class="mord"
+                        ><span class="mtable"
+                          ><span class="col-align-l"
+                            ><span class="vlist-t vlist-t2"
+                              ><span class="vlist-r"
+                                ><span class="vlist" style="height: 1.69em"
+                                  ><span style="top: -3.69em"
+                                    ><span
+                                      class="pstrut"
+                                      style="height: 3.008em"
+                                    ></span
+                                    ><span class="mord"
+                                      ><span
+                                        class="mord mathdefault"
+                                        style="margin-right: 0.0037em"
+                                        >α</span
+                                      ><span class="mopen">(</span
+                                      ><span class="mord"
+                                        ><span class="mord mathdefault">e</span
+                                        ><span class="msupsub"
+                                          ><span class="vlist-t"
+                                            ><span class="vlist-r"
+                                              ><span
+                                                class="vlist"
+                                                style="height: 0.664392em"
+                                                ><span
+                                                  style="
+                                                    top: -3.063em;
+                                                    margin-right: 0.05em;
+                                                  "
+                                                  ><span
+                                                    class="pstrut"
+                                                    style="height: 2.7em"
+                                                  ></span
+                                                  ><span
+                                                    class="sizing reset-size6 size3 mtight"
+                                                    ><span
+                                                      class="mord mathdefault mtight"
+                                                      style="
+                                                        margin-right: 0.04398em;
+                                                      "
+                                                      >z</span
+                                                    ></span
+                                                  ></span
+                                                ></span
+                                              ></span
+                                            ></span
+                                          ></span
+                                        ></span
+                                      ><span
+                                        class="mspace"
+                                        style="
+                                          margin-right: 0.2222222222222222em;
+                                        "
+                                      ></span
+                                      ><span class="mbin">−</span
+                                      ><span
+                                        class="mspace"
+                                        style="
+                                          margin-right: 0.2222222222222222em;
+                                        "
+                                      ></span
+                                      ><span class="mord">1</span
+                                      ><span class="mclose">)</span
+                                      ><span class="mpunct">,</span></span
+                                    ></span
+                                  ><span style="top: -2.25em"
+                                    ><span
+                                      class="pstrut"
+                                      style="height: 3.008em"
+                                    ></span
+                                    ><span class="mord"
+                                      ><span
+                                        class="mord mathdefault"
+                                        style="margin-right: 0.04398em"
+                                        >z</span
+                                      ><span class="mpunct">,</span></span
+                                    ></span
+                                  ></span
+                                ><span class="vlist-s">​</span></span
+                              ><span class="vlist-r"
+                                ><span class="vlist" style="height: 1.19em"
+                                  ><span></span></span></span></span></span
+                          ><span class="arraycolsep" style="width: 1em"></span
+                          ><span class="col-align-l"
+                            ><span class="vlist-t vlist-t2"
+                              ><span class="vlist-r"
+                                ><span class="vlist" style="height: 1.69em"
+                                  ><span style="top: -3.69em"
+                                    ><span
+                                      class="pstrut"
+                                      style="height: 3.008em"
+                                    ></span
+                                    ><span class="mord"
+                                      ><span class="mord text"
+                                        ><span class="mord">if </span></span
+                                      ><span
+                                        class="mord mathdefault"
+                                        style="margin-right: 0.04398em"
+                                        >z</span
+                                      ><span
+                                        class="mspace"
+                                        style="
+                                          margin-right: 0.2777777777777778em;
+                                        "
+                                      ></span
+                                      ><span class="mrel">&lt;</span
+                                      ><span
+                                        class="mspace"
+                                        style="
+                                          margin-right: 0.2777777777777778em;
+                                        "
+                                      ></span
+                                      ><span class="mord">0</span
+                                      ><span class="mpunct">,</span></span
+                                    ></span
+                                  ><span style="top: -2.25em"
+                                    ><span
+                                      class="pstrut"
+                                      style="height: 3.008em"
+                                    ></span
+                                    ><span class="mord"
+                                      ><span class="mord text"
+                                        ><span class="mord">if </span></span
+                                      ><span
+                                        class="mord mathdefault"
+                                        style="margin-right: 0.04398em"
+                                        >z</span
+                                      ><span
+                                        class="mspace"
+                                        style="
+                                          margin-right: 0.2777777777777778em;
+                                        "
+                                      ></span
+                                      ><span class="mrel">&gt;</span
+                                      ><span class="mrel">=</span
+                                      ><span
+                                        class="mspace"
+                                        style="
+                                          margin-right: 0.2777777777777778em;
+                                        "
+                                      ></span
+                                      ><span class="mord">0</span
+                                      ><span class="mord">.</span></span
+                                    ></span
+                                  ></span
+                                ><span class="vlist-s">​</span></span
+                              ><span class="vlist-r"
+                                ><span class="vlist" style="height: 1.19em"
+                                  ><span></span></span></span></span></span></span></span
+                      ><span
+                        class="mclose nulldelimiter"
+                      ></span></span></span></span></span></span
+            ><span>﻿</span></span
+          >
+        </p>
+        <p id="6e86f453-90bb-480b-b50e-b4a22fe48295" class=""></p>
+        <p id="0dd928b6-132d-4d65-924a-4da5b3787270" class=""></p>
+        <ul id="ccb9dc85-a8f0-4c6f-a802-455c23739ce6" class="bulleted-list">
+          <li>
+            Takes on negative values when
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>z</mi><mo>&lt;</mo><mn>0</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >z &lt; 0</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.5782em; vertical-align: -0.0391em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">&lt;</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">0</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >, so average output is closer to 0. This helps alleviate the
+            vanishing gradient problem.
+          </li>
+        </ul>
+        <ul id="6e0a862c-6c23-491f-8bbe-0bbacb3392a8" class="bulleted-list">
+          <li>
+            There is also a non-zero gradient when
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>z</mi><mo>&lt;</mo><mn>0</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >z&lt;0</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.5782em; vertical-align: -0.0391em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">&lt;</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">0</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            to prevent dead neurons.
+          </li>
+        </ul>
+        <ul id="5bc8d4e4-c628-4663-a3bb-8b69bb271374" class="bulleted-list">
+          <li>
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            defines the value the function approaches when
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>z</mi></mrow
+                        ><annotation encoding="application/x-tex"
+                          >z</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            is highly negative.
+          </li>
+        </ul>
+        <ul id="ed88c668-d695-4b29-971c-50922fbde594" class="bulleted-list">
+          <li>
+            Usually
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >
+            is set to 1, but it can be tuned like any other hyperparameter.
+          </li>
+        </ul>
+        <ul id="b4081015-7925-4384-a211-48655f41cc1c" class="bulleted-list">
+          <li>
+            When
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\alpha=1</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.0037em"
+                        >α</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">1</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >, the function is smooth everywhere (including around
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >z=0</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">0</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >). This helps speed up gradient descent since the function
+            doesn&#x27;t bounce much to the left and right of
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >z=0</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.43056em; vertical-align: 0em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.04398em"
+                        >z</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">0</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >.
+          </li>
+        </ul>
+        <ul id="bd427074-44ff-4def-ab46-3c8c809a514d" class="bulleted-list">
+          <li>
+            Advantages: <strong>reduced training time</strong> and
+            <strong>better performance</strong> on test set.
+          </li>
+        </ul>
+        <ul id="d47dd13c-a15f-48c5-bbf9-0abaf6bb09fa" class="bulleted-list">
+          <li>
+            Disadvantage: <strong>slower to compute</strong> than ReLU. Faster
+            convergence during training compensates for this, but it will still
+            be slower than ReLU at test time.
+          </li>
+        </ul>
+        <h3 id="db54cba4-671f-4607-a8c6-cad15d643a4a" class="">
+          Using ELU in Keras
+        </h3>
+        <pre id="c72eedc1-5572-4c5f-9aed-c7c3940a4e8c" class="code"><code>...
+keras.layers.Dense(10, kernel_initializer=&quot;he_normal&quot;),
+keras.layers.ELU(),
+...</code></pre>
+        <hr id="60ec852c-1ac0-45e7-a3c4-a16f0501c3e3" />
+        <h2 id="beb704ff-3aa9-40ce-93d9-8185b13cb166" class="">
+          Scaled Exponential Linear Unit (SELU)
+        </h2>
+        <ul id="8bad8c84-7575-4a5d-9dc7-7f4bd883852f" class="bulleted-list">
+          <li>
+            Makes network self-normalize (i.e. every layer&#x27;s output
+            maintains
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+            ><span
+              data-token-index="0"
+              contenteditable="false"
+              class="notion-text-equation-token"
+              style="
+                user-select: all;
+                -webkit-user-select: all;
+                -moz-user-select: all;
+              "
+              ><span></span
+              ><span
+                ><span class="katex"
+                  ><span class="katex-mathml"
+                    ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                      ><semantics
+                        ><mrow
+                          ><mi>μ</mi><mo>=</mo><mn>0</mn
+                          ><mo separator="true">,</mo><mi>σ</mi><mo>=</mo
+                          ><mn>1</mn></mrow
+                        ><annotation encoding="application/x-tex"
+                          >\mu=0, \sigma=1</annotation
+                        ></semantics
+                      ></math
+                    ></span
+                  ><span class="katex-html" aria-hidden="true"
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.625em; vertical-align: -0.19444em"
+                      ></span
+                      ><span class="mord mathdefault">μ</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="
+                          height: 0.8388800000000001em;
+                          vertical-align: -0.19444em;
+                        "
+                      ></span
+                      ><span class="mord">0</span><span class="mpunct">,</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.16666666666666666em"
+                      ></span
+                      ><span
+                        class="mord mathdefault"
+                        style="margin-right: 0.03588em"
+                        >σ</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span
+                      ><span class="mrel">=</span
+                      ><span
+                        class="mspace"
+                        style="margin-right: 0.2777777777777778em"
+                      ></span></span
+                    ><span class="base"
+                      ><span
+                        class="strut"
+                        style="height: 0.64444em; vertical-align: 0em"
+                      ></span
+                      ><span class="mord">1</span></span
+                    ></span
+                  ></span
+                ></span
+              ><span>﻿</span></span
+            >) and therefore not suffer from unstable gradients IF:
+            <ul id="a21c9679-57b0-4349-9619-29b1f6d30276" class="bulleted-list">
+              <li>
+                Input features are standardized (<style>
+                  @import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css');</style
+                ><span
+                  data-token-index="0"
+                  contenteditable="false"
+                  class="notion-text-equation-token"
+                  style="
+                    user-select: all;
+                    -webkit-user-select: all;
+                    -moz-user-select: all;
+                  "
+                  ><span></span
+                  ><span
+                    ><span class="katex"
+                      ><span class="katex-mathml"
+                        ><math xmlns="http://www.w3.org/1998/Math/MathML"
+                          ><semantics
+                            ><mrow
+                              ><mi>μ</mi><mo>=</mo><mn>0</mn
+                              ><mo separator="true">,</mo><mi>σ</mi><mo>=</mo
+                              ><mn>1</mn></mrow
+                            ><annotation encoding="application/x-tex"
+                              >\mu=0, \sigma=1</annotation
+                            ></semantics
+                          ></math
+                        ></span
+                      ><span class="katex-html" aria-hidden="true"
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="height: 0.625em; vertical-align: -0.19444em"
+                          ></span
+                          ><span class="mord mathdefault">μ</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span
+                          ><span class="mrel">=</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span></span
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="
+                              height: 0.8388800000000001em;
+                              vertical-align: -0.19444em;
+                            "
+                          ></span
+                          ><span class="mord">0</span
+                          ><span class="mpunct">,</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.16666666666666666em"
+                          ></span
+                          ><span
+                            class="mord mathdefault"
+                            style="margin-right: 0.03588em"
+                            >σ</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span
+                          ><span class="mrel">=</span
+                          ><span
+                            class="mspace"
+                            style="margin-right: 0.2777777777777778em"
+                          ></span></span
+                        ><span class="base"
+                          ><span
+                            class="strut"
+                            style="height: 0.64444em; vertical-align: 0em"
+                          ></span
+                          ><span class="mord">1</span></span
+                        ></span
+                      ></span
+                    ></span
+                  ><span>﻿</span></span
+                >).
+              </li>
+            </ul>
+            <ul id="499e896f-6008-4bfc-b5b0-65714ed3381b" class="bulleted-list">
+              <li>
+                Network architecture is sequential (no recurrent or skip
+                connections).
+              </li>
+            </ul>
+            <ul id="f65c4b32-fe73-4c7a-b4fd-8158468bf34f" class="bulleted-list">
+              <li>
+                All layers are dense and initialized with LeCun normal
+                initialization.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul id="ee7ccc7f-0722-44fa-a4c1-190d513ddf35" class="bulleted-list">
+          <li>
+            Research has shown SELU can improve performance in CNNs as well.
+          </li>
+        </ul>
+        <h3 id="87745417-87ef-4358-b549-3808bfb63bec" class="">
+          Using SELU in Keras
+        </h3>
+        <pre
+          id="9834b23b-c024-4a15-8147-403d2ecf835b"
+          class="code"
+        ><code>keras.layers.Dense(10, activation=&quot;selu&quot;, kernel_initializer=&quot;lecun_normal&quot;)</code></pre>
+        <hr id="2ab3ead9-0ee4-4b06-a67d-b56d27a1f0b3" />
+        <h2 id="cbff223e-ec71-4598-9bca-17ef7b717e11" class="">
+          Rules of thumb
+        </h2>
+        <ul id="c0c2befe-ddce-4f31-be39-558a25a282a3" class="bulleted-list">
+          <li>
+            Order of preference of activation functions
+            <ol
+              id="147679c6-20da-458a-85f6-0c9f28b0b398"
+              class="numbered-list"
+              start="1"
+            >
+              <li>SELU (if conditions for self-normalization are met)</li>
+            </ol>
+            <ol
+              id="ec51e73e-b881-43fb-bb53-a62a241871fb"
+              class="numbered-list"
+              start="2"
+            >
+              <li>ELU</li>
+            </ol>
+            <ol
+              id="a4565c21-d570-4355-a0fb-77747e8e990c"
+              class="numbered-list"
+              start="3"
+            >
+              <li>Leaky ReLU (and its variants)</li>
+            </ol>
+            <ol
+              id="f2f4a9a0-c557-4ae0-a7b2-e207ceb51f19"
+              class="numbered-list"
+              start="4"
+            >
+              <li>ReLU</li>
+            </ol>
+            <ol
+              id="8dad943d-cdb7-4c44-8290-0981ccc42885"
+              class="numbered-list"
+              start="5"
+            >
+              <li>Hyperbolic Tangent</li>
+            </ol>
+            <ol
+              id="06cb9680-458f-407c-b350-072b30d72e54"
+              class="numbered-list"
+              start="6"
+            >
+              <li>Logistic</li>
+            </ol>
+          </li>
+        </ul>
+        <ul id="da093bf1-113a-4e4a-8ed4-073dd9494463" class="bulleted-list">
+          <li>For low runtime latency, use Leaky ReLU</li>
+        </ul>
+        <ul id="1aa34509-c84b-49a0-9e13-1260784759a4" class="bulleted-list">
+          <li>
+            If extra time and computing power are available, use
+            cross-validation to evaluate:
+            <ul id="c3a67cc1-bbcc-4bcf-b7d4-2076466970f4" class="bulleted-list">
+              <li>RReLU if network is overfitting</li>
+            </ul>
+            <ul id="d7b9b1b7-742f-436b-bba2-a64372fa339f" class="bulleted-list">
+              <li>PReLU if a large training set is available</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </body>
+</html>
