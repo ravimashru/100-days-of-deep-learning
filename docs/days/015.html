@@ -1,0 +1,688 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Day 15 - Batch Normalization</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9deb58be-016e-4ce1-b8dd-3795208cf529" class="page sans"><header><h1 class="page-title">Day 15 - Batch Normalization</h1></header><div class="page-body"><div id="633eab08-2794-4c6f-a110-e3063da76779" class="column-list"><div id="218a50d5-fabd-4768-a554-78f72e56148d" style="width:25%" class="column"><p id="af2f947c-5575-4bef-9486-346a11efe54c" class="">
+</p><p id="3e490b2f-d85b-4ab5-812e-5bcb183a2e13" class="">
+</p><p id="526ba457-5082-4c3c-b5b2-e5b05bdffbd6" class="">
+</p><p id="5f743073-049d-4155-a7e2-289424073919" class="">
+</p><p id="610c714e-f148-4642-b788-a9151df04870" class="">
+</p><p id="be00bc97-64f2-4e99-b857-b8c13d001765" class="">What does batch normalization do?</p><p id="3973ecd0-5039-4cc9-b853-56d24796b7aa" class="">
+</p><p id="d57a98aa-4f11-4063-98e6-d5379c78da3d" class="">
+</p><p id="023b8997-ae44-4cd2-84f7-84d0361bb0d9" class="">
+</p><p id="43015a5a-8a7d-4398-8eb8-1b56b115b090" class="">
+</p><p id="0ef061cb-b75b-4dad-8aa3-28f6aafdf0c0" class="">
+</p><p id="1a668186-3d23-4ced-9073-939cce32c042" class="">
+</p><p id="4d28d886-127e-4625-8f73-b80699b76ad0" class="">
+</p><p id="9042c67a-62c2-42fe-885a-d606d0b3d9b8" class="">Using batch normalization for input standardization</p><p id="0a4c2351-3fa4-42c6-af34-64be655fc0f5" class="">
+</p><p id="fbd05225-73ce-420c-b24f-2a919a247f2f" class="">
+</p><p id="3e936351-0a7d-44e7-8817-b500d7ca8137" class="">
+</p><p id="9058d366-d408-4717-87ae-03c631d596e3" class="">
+</p><p id="4c56fef4-c808-46f8-b7e0-a8d3e8fd7829" class="">
+</p><p id="1e0f58d9-e3e6-459d-b5f0-a6eecb647214" class="">
+</p><p id="e334a30d-c106-4ebe-b3ac-b472ed2fd1e5" class="">
+</p><p id="e0a37c09-fb54-48a7-9bf7-102cbe09f09e" class="">
+</p><p id="7a20ea56-a7b0-4919-a240-642c816939e1" class="">
+</p><p id="4c8ef7b4-a3b3-4a59-a8e5-18cd69a5d586" class="">
+</p><p id="6be6e45b-0598-4779-9c8f-70c06a0d4603" class="">
+</p><p id="77c14f38-9e8b-4285-8265-bb245658464d" class="">
+</p><p id="f635a2b2-849f-4483-9142-3da1667db431" class="">
+</p><p id="f8c781d9-826f-4758-a015-3da45f8896ac" class="">Trainable and non-trainable parameters</p><p id="59eeb66c-cc9d-4963-a8c8-615d9bf5121d" class="">
+</p><p id="786b0963-8eda-4318-9c45-fa163240497f" class="">
+</p><p id="e624268d-db7a-426f-8467-226070f07ad2" class="">
+</p><p id="fb645d45-e5c3-4b08-9cfb-305297c12d24" class="">
+</p><p id="94ee58b1-ff46-44ef-8aa8-d8b38a1a7d55" class="">
+</p><p id="eda40d73-cf88-4aec-9085-7cb2803a579e" class="">
+</p><p id="83d67c1b-1170-4be4-ae39-908364d23695" class="">
+</p><p id="5717f76c-8869-4186-8e51-472e8e21e907" class="">Performance impact during training and inference</p><p id="9e2691b4-e914-4801-977b-81d66c28361b" class="">
+</p></div><div id="7952602e-8fab-4f50-9e1a-f15c905d35ed" style="width:75%" class="column"><p id="e22e6b65-c888-4384-abd6-0a9597bd0a8c" class="">Using the right activation functions and weight initialization strategies significantly reduce the problem of unstable gradients at the beginning of training. However, they don&#x27;t guarantee that the problem won&#x27;t come back during training.</p><p id="b158b981-bcbb-4747-9812-f4366cccc9b3" class="">
+</p><p id="53936392-3eba-461d-a95a-3e817f91b928" class="">Batch Normalization <strong>adds an operation</strong> in the model <strong>before or after the activation function</strong> in <strong>each hidden layer</strong>.</p><p id="f7097a99-3f2d-49aa-bfa7-7292bcba2ec9" class="">This operation, <strong>zero-centers</strong> and <strong>normlizes</strong> each input, and then <strong>shifts</strong> and <strong>scales</strong> the result.</p><p id="2452601f-6f74-4ec4-9248-46a8bc89e234" class="">The mean and variance used to zero-center and normalize the inputs is<strong> calculated per mini-batch of training data</strong>.</p><p id="9b77df13-c7d1-45bb-8b2f-89449a393f5b" class="">
+</p><p id="f7af1a1d-3ed9-4360-ad9d-227545c52110" class="">Batch Normalization also acts as a regularizer and reduced the need for other regularization techniques (e.g. dropout).</p><p id="065722f9-1ba2-40f2-981d-6872a133e881" class="">
+</p><p id="c87c145f-1dde-4480-80cf-d981ce28fdb1" class="">If a Batch Normalization layer is added as the first layer of a neural network then it will approximately standardize the inputs and <code>StandardScaler</code> doesn&#x27;t need to be used.</p><p id="6c75db51-f102-4c00-b8e7-f70622022798" class="">The standardization will be approximate because the layer will find the mean and variance using only one batch at a time, and the layer can also scale and shift input features in addition to standardization.</p><p id="f60739ed-13db-492c-b497-a5dd0b53c2ac" class="">
+</p><h3 id="2eaa5f16-dc39-407a-ad37-2526586ec2aa" class=""><strong>The Batch Normalization Algorithm</strong></h3><ol id="f318844a-0053-4207-9f7f-cf156cadf13d" class="numbered-list" start="1"><li>Calculate the mean of each input across the entire mini-batch.</li></ol><ol id="3ae46b8e-c897-4df4-a22f-6d82039ecb53" class="numbered-list" start="2"><li>Calculate the standard deviation of each input across the entire mini-batch.</li></ol><ol id="207f36ce-781b-4b4a-bb5a-2f57a5702565" class="numbered-list" start="3"><li>Standardize each input instance in the mini-batch using the mean and standard deviation calculated above.</li></ol><ol id="05268c2f-cd22-432e-969a-8fa82a5ec819" class="numbered-list" start="4"><li>Offset and scale each instance after standardization using a different offset parameter and scaling parameter for each instance.</li></ol><p id="51046514-f6a5-4ae1-95a5-d044b6b7aebf" class="">
+</p><p id="0aba8073-6a1a-4466-b3de-75d404afd604" class="">Each input will have its own mean, standard deviation, offset and scaling parameters.</p><p id="ec443dbd-41d9-408c-aafd-3f1942f4cb21" class="">The offset and scaling parameter vectors are learned through backpropagation. They are <strong>trainable parameters</strong> in Keras.</p><p id="5b53c4b1-db07-4353-a733-e0517bb94297" class="">The mean and standard deviation parameter vectors are calculated per mini-batch during training time and not learned during backpropagation. They are called <strong>non-trainable parameters</strong> in Keras.</p><p id="735c2577-b08e-4903-af1c-00545d1c2f88" class="">Keras keeps an exponential moving average of the mean and standard deviation parameter vectors, and uses these after training is complete.</p><p id="5fa507d5-c29c-47c7-9cd1-f0f26c413f56" class="">
+</p><p id="255565d9-aa19-451f-8465-53988deb47ac" class="">Batch Normalization increases the number of parameters in the model and therefore makes each epoch slower. However, this is compensated for by faster convergence (fewer epochs to reach same performance).</p><p id="ea3ef370-cf09-4a11-8d70-89cd763a4090" class="">
+</p><p id="5a41e99a-b53a-4665-8e92-01df330daee7" class="">Batch Normalization also slows down the network when making predictions since there are more computations to perform. However, it is possible to fuse a Batch Normalization layer with previous layer after training to avoid this. This is done by updating the previous layer&#x27;s weights and biases so that its output matches the scale and offset of the Batch Normalization layer.</p><p id="707be2c5-7362-4cd4-ad70-0808b5777813" class="">
+</p><h3 id="cbbb7d5a-e1a3-49f6-86a2-1530f843d7d9" class="">Using Batch Normalization in Keras</h3><p id="14637176-a576-4cb4-9273-7f929d580398" class="">Batch Normalization can be added before or after each hidden layer’s activation function. There is a lot of debate about which is better, and it usually depends on the task and dataset.</p><p id="ffb5d396-91e8-437c-8898-8d064f07abc1" class="">To add it after a hidden layer’s activation, add a <code>BatchNormalization</code> layer after a hidden layer.</p><p id="bcd71ec2-537b-429f-aa64-7bbb70916748" class="">To add it before a layer’s activation, remove the activation from the hidden layer and add it separately after the <code>BatchNormalization</code> layer. Also, since the <code>BatchNormalization</code> layer includes an offset per input, you can also remove the bias from the previous layer.</p><p id="f8fa17e9-5285-4b6b-a137-c05f7db9cf0c" class="">
+</p><h3 id="80c6f004-a689-4c49-9d35-d0cc5da5957d" class="">Hyperparameters</h3><p id="d8a528ef-b343-4457-9e72-7c40217a13bd" class="">The <strong>momentum</strong> hyperparameter is used when updating the exponential moving averages of the mean and standard deviation parameter vectors. </p><p id="36afcc02-a53a-45ae-b8af-38941d424f16" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>v</mi><mo>⃗</mo></mover><mo>←</mo><mover accent="true"><mi>v</mi><mo>⃗</mo></mover><mo>×</mo><mtext>momentum</mtext><mo>+</mo><msub><mover accent="true"><mi>v</mi><mo>⃗</mo></mover><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>×</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mtext>momentum</mtext><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\vec{v} \larr \vec{v} \times \text{momentum} + \vec{v}_{new} \times (1 - \text{momentum})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.714em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.20772em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79733em;vertical-align:-0.08333em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.20772em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69841em;vertical-align:-0.08333em;"></span><span class="mord text"><span class="mord">momentum</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.864em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">v</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.20772em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">momentum</span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><p id="1958c761-765a-4774-adac-5c3ea5a227bc" class="">A good value of momentum is close to 1 (e.g. 0.9, 0.99, 0.999, etc.) use more 9s for larger datasets and smaller mini-batches.</p><p id="b1b4d87d-87f1-4e61-aba2-f0e1b2171be9" class="">
+</p><p id="a771600f-6591-49a4-9f6f-3f96d1e65fb6" class="">The <strong>axis </strong>hyperparameter determines which axis should be normalized. The default value is -1, which means the last axis will be normalized. The mean and standard deviation will be calculated across other axes.</p><p id="b94ec555-5fc9-4a38-9dc6-20a15ce21633" class="">For 2-dimensional data with dimensions [batch size, features], this is what we need - each input feature normalized using mean and standard deviation calculated across the mini-batch.</p><p id="7857e667-a33f-44f6-be1c-2a8189782b32" class="">For 3-dimensional data such as MNIST handwritten digits with dimensions [batch size, height, width], this will cause mean and standard deviation to be calculated per column of pixels computed across all instances in the mini-batch and across all rows in the column (28 mean, standard deviation, scale and shift parameters).</p><p id="ae2b322d-e9b6-47b5-951b-1a9cbed1a59f" class="">To treat the pixels in the image independently, set <code>axis=[1, 2]</code>.</p></div></div></div></article></body></html>
